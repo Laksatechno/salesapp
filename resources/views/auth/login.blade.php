@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
     <title>{{ config('app.name') }}</title>
-    <meta name="theme-color" content="#FF396F">
-    <meta name="msapplication-navbutton-color" content="#FF396F">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#FF396F">
+    <meta name="theme-color" content="#630051">
+    <meta name="msapplication-navbutton-color" content="#630051">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#630051">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicons -->

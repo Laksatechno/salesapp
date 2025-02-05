@@ -80,7 +80,7 @@
                                                     <a class="dropdown-item" href="{{ route('shipments.create', $sale->id) }}" onclick="return confirm('Apakah Anda yakin ingin membuat pengiriman?')">Kirim</a>
                                                 </li> --}}
                                                 <li>
-                                                    <button type="button" class="btn btn-text-primary kirim-barang-btn" data-invoice-id="{{ $sale->id }}">KIRIM BARANG</button>
+                                                    <button type="button" class="btn btn-text-primary kirim-barang-btn" data-invoice-id="{{ $sale->id }}">KIRIM</button>
                                                 </li>
                                             @else
                                                 <li>

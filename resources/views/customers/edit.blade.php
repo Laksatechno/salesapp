@@ -18,7 +18,7 @@
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" required>
+            <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" >
         </div>
         <div class="form-group">
             <label for="address">Address</label>

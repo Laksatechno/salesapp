@@ -29,21 +29,22 @@ class CustomerController extends Controller
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:customers',
+                'email' => 'nullable|email|max:255|unique:customers',
                 'tipe_pelanggan' => 'required|string|max:50',
             ]);
-    
+        
             // Menyimpan customer baru ke dalam database
             Customer::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'email' => $request->email,
+                'email' => $request->email ?: null, // Jika kosong, simpan sebagai null
                 'tipe_pelanggan' => $request->tipe_pelanggan,
             ]);
-    
+        
             return redirect()->route('customers.index')->with('success', 'Customer added successfully.');
         }
+        
     
         // Menampilkan form untuk mengedit customer
         public function edit($id)
@@ -59,7 +60,7 @@ class CustomerController extends Controller
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:customers,email,' . $id,
+                'email' => 'nullable|email|max:255|unique:customers,email,' . $id,
                 'tipe_pelanggan' => 'required|string|max:50',
             ]);
     

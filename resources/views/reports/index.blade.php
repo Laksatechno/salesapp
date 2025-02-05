@@ -175,6 +175,10 @@
 <!-- DateRangePicker JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+
+
 <script>
     $(document).ready(function () {
         // Inisialisasi DateRangePicker
@@ -186,8 +190,8 @@
             }
         });
         
-        // $('#productTable').DataTable();
-        // $('#customerTable').DataTable();
+        $('#productTable').DataTable();
+        $('#customerTable').DataTable();
         
 
         // Event ketika rentang tanggal dipilih

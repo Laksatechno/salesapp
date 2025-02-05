@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ $customer->name }}</td>
                             <td>{{ $customer->phone }}</td>
-                            <td>{{ $customer->email }}</td>
+                            <td>{{ $customer->email ?? '-' }}</td>
                             <td>{{ $customer->address }}</td>
                             <td>{{ $customer->tipe_pelanggan }}</td>
                             <td>

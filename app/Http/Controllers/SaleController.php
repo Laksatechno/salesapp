@@ -72,6 +72,8 @@ class SaleController extends Controller
     
         try {
             $totalSale = 0;
+            $totalDiskon = 0; // Untuk menyimpan total diskon semua item
+    
             foreach ($items as $item) {
                 // Cari produk berdasarkan ID dari item
                 $product = Product::find($item['product_id']);
@@ -88,50 +90,29 @@ class SaleController extends Controller
                 // Kurangi stok berdasarkan jumlah yang dibeli
                 $product->decrement('stock', $item['quantity']);
     
-                // Hitung total penjualan
-                $item['total'] = $item['quantity'] * $item['price'];
-                $totalSale += $item['total'];
-            }
+                // Hitung total harga sebelum diskon
+                $subtotal = $item['quantity'] * $item['price'];
     
-            // Hitung diskon
-            $diskonPercentage = $request->diskon;
-            $diskonAmount = ($diskonPercentage / 100) * $totalSale;
+                // Hitung diskon per item
+                $diskonBarang = isset($item['diskon_barang']) ? $item['diskon_barang'] : 0;
+                $subtotalSetelahDiskon = $subtotal - $diskonBarang;
+    
+                // Tambahkan ke total penjualan & total diskon
+                $totalSale += $subtotalSetelahDiskon;
+                $totalDiskon += $diskonBarang;
+            }
     
             // Hitung pajak jika tax_status adalah 'ppn'
             $tax = 0;
             if ($request->tax_status === 'ppn') {
-                $dpp = ceil($totalSale*11)/12;
+                $dpp = ceil($totalSale * 11) / 12;
                 $tax = $dpp * 0.12; // 12% pajak
             }
     
-            // Generate invoice number
-            // $currentYear = Carbon::now()->year;
-
-            // // Ambil invoice terakhir untuk tahun ini
-            // $latestInvoice = Sale::whereYear('created_at', $currentYear)
-            //     ->orderBy('invoice_number', 'desc')
-            //     ->first();
-            
-            // if (empty($latestInvoice) || date('Y', strtotime($latestInvoice->created_at)) !== $currentYear) {
-            //     // Jika tidak ada invoice untuk tahun ini, mulai dari 1
-            //     $id = 1;
-            // } else {
-            //     // Ambil nilai integer dari invoice_number terakhir dan tambahkan 1
-            //     $id = (int)$latestInvoice->invoice_number + 1;
-            // }
-
+            // Generate nomor invoice
             $currentYear = date('Y');
             $lastInvoice = Sale::whereYear('created_at', $currentYear)->orderBy('invoice_number', 'DESC')->first();
-    
-            if ($lastInvoice) {
-                // If the last invoice is from the current year, increment the number
-                $id = intval(substr($lastInvoice->invoice_number, -4)) + 1;
-            } else {
-                // If there are no invoices for the current year, start from 1
-                $id = 1;
-            }
-            
-            // Format invoice_number dengan padding 4 digit
+            $id = $lastInvoice ? intval(substr($lastInvoice->invoice_number, -4)) + 1 : 1;
             $invoiceNumber = str_pad($id, 4, '0', STR_PAD_LEFT);
     
             // Pastikan invoice_number unik
@@ -145,7 +126,7 @@ class SaleController extends Controller
             if ($request->due_date === '1') {
                 $dueDate = now()->addMonth();
             } elseif ($request->due_date === '2') {
-                $dueDate = now()->addMonth(2);
+                $dueDate = now()->addMonths(2);
             }
     
             // Simpan data penjualan
@@ -158,7 +139,7 @@ class SaleController extends Controller
                 'status' => 'pending',
                 'invoice_number' => $invoiceNumber,
                 'tax' => $tax,
-                'diskon' => $diskonAmount,
+                'diskon' => $totalDiskon, // Menyimpan total diskon semua item
             ]);
     
             // Simpan detail penjualan
@@ -167,7 +148,8 @@ class SaleController extends Controller
                     'product_id' => $item['product_id'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
-                    'total' => $item['total'],
+                    'total' => ($item['quantity'] * $item['price']) - $item['diskon_barang'],
+                    'diskon_barang' => $item['diskon_barang'], // Simpan diskon per barang
                 ]);
             }
     
@@ -185,6 +167,7 @@ class SaleController extends Controller
             return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
+    
     
     
     

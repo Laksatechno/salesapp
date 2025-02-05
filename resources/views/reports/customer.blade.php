@@ -11,10 +11,11 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Invoice Number</th>
+                        <th>NO. INV</th>
                         <th>Produk</th>
                         <th>Quantity</th>
-                        <th>Tanggal Penjualan</th>
+                        <th>Total</th>
+                        <th>Tanggal</th>
                         <th>Marketing</th>
                     </tr>
                 </thead>
@@ -24,6 +25,7 @@
                             <td>{{ $sale->invoice_number }}</td>
                             <td>{{ $sale->details[0]->product->name }}</td>
                             <td>{{ $sale->details[0]->quantity }}</td>
+                            <td>Rp {{ number_format($sale->total + $sale->tax) }}</td>
                             <td>{{ $sale->created_at->format('d-m-Y') }}</td>
                             <td>{{ $sale->marketing->name }}</td>
                         </tr>
@@ -34,6 +36,20 @@
                     @endforelse
                 </tbody>
             </table>
+            {{-- create table total sales    --}}
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th style="text-align: right;">Total Penjualan Keseluruhan</th>
+                        @php 
+                            $total = 0;
+                            foreach ($sales as $sale) {
+                                $total += $sale->total + $sale->tax;
+                            }
+                        @endphp
+                        <th style="text-align: right;">Rp {{ number_format($total) }}</th>
+                    </tr>
+                </thead>
         </div>
     </div>
 </div>

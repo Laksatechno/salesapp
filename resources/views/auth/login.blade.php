@@ -105,7 +105,7 @@
 
                         <div class="form-links mt-2">
                             <div>
-                                <a href="register">Mendaftar</a>
+                                <a href="register" style="text-decoration: underline;">Belum punya akun? </a>
                             </div>
                             <div><a href="forgot-password" class="text-muted">Lupa Password?</a></div>
                         </div>

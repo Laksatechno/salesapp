@@ -1,4 +1,13 @@
 
+@push ('custom-styles')
+<style>
+.img-square {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+</style>
+@endpush
         <!-- App Header -->
         <div class="appHeader bg-purple text-light">
             <div class="left">
@@ -11,10 +20,10 @@
             </div>
             <div class="right">
                 <div class="headerButton" data-toggle="dropdown" id="dropdownMenuLink" aria-haspopup="true">
-                    @if(Auth::user()->photo == '')
+                    @if(Auth::user()->foto == '')
                         <img src="{{ asset('content/avatar.jpg') }}" alt="picture" class="imaged w32 rounded">
                     @else
-                        <img src="{{ asset('storage/photos/' . Auth::user()->photo ) }}" alt="picture" class="imaged w32 rounded">
+                        <img src="{{ asset('photo/' . Auth::user()->foto ) }}" alt="picture" class="imaged w32 rounded img-square">
                     @endif
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">

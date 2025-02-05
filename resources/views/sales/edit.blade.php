@@ -37,13 +37,31 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="price">Harga</label>
+                    <input type="number" id="price" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
                     <label for="quantity">Jumlah</label>
                     <input type="number" id="quantity" class="form-control">
                 </div>
 
-                <div class="form-group">
-                    <label for="price">Harga</label>
-                    <input type="number" id="price" class="form-control" readonly>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="diskon_type">Jenis Diskon</label>
+                            <select id="diskon_type" class="form-control">
+                                <option value="percent">Persen (%)</option>
+                                <option value="amount">IDR (Rupiah)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="diskon_value">Nilai Diskon</label>
+                            <input type="number" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0" step="0.01">
+                        </div>
+                    </div>
                 </div>
 
                 <button type="button" id="addItem" class="btn btn-primary">Tambah Barang</button>
@@ -54,6 +72,7 @@
                             <th>Produk</th>
                             <th>Jumlah</th>
                             <th>Harga</th>
+                            <th>Diskon/Item</th>
                             <th>Total</th>
                             <th>Aksi</th>
                         </tr>
@@ -64,6 +83,7 @@
                                 <td>{{ $detail->product->name }}</td>
                                 <td>{{ $detail->quantity }}</td>
                                 <td>{{ $detail->price }}</td>
+                                <td>{{ $detail->diskon_barang }}</td>
                                 <td>{{ $detail->total }}</td>
                                 <td><button type="button" class="btn btn-danger btn-sm" onclick="removeItem({{ $loop->index }})">Hapus</button></td>
                             </tr>
@@ -78,6 +98,7 @@
                         'quantity' => $detail->quantity,
                         'price' => $detail->price,
                         'total' => $detail->total,
+                        'diskon_barang' => $detail->diskon_barang
                     ];
                 })) }}">
 
@@ -113,6 +134,7 @@
                 'quantity' => $detail->quantity,
                 'price' => $detail->price,
                 'total' => $detail->total,
+                'diskon_barang' => $detail->diskon_barang
             ];
         }))) !!}');
 
@@ -163,6 +185,7 @@
                         <td>${item.name}</td>
                         <td>${item.quantity}</td>
                         <td>${item.price}</td>
+                        <td>${item.diskon_barang}</td>
                         <td>${item.total}</td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">
@@ -178,25 +201,24 @@
 
         // Tambahkan item baru
         $('#addItem').click(function () {
-            const productId = productDropdown.val();
-            const productName = productDropdown.find(':selected').data('name');
+            const productId = $('#product_id').val();
+            const productName = $('#product_id option:selected').text();
             const quantity = parseInt($('#quantity').val(), 10);
-            const price = parseFloat(priceInput.val());
-
-            if (!productId || !quantity || !price) {
-                alert('Lengkapi data barang sebelum menambah.');
-                return;
+            let price = parseFloat($('#price').val());
+            const diskonType = $('#diskon_type').val();
+            const diskonValue = parseFloat($('#diskon_value').val()) || 0;
+            
+            let diskon_barang = 0;
+            if (diskonType === 'percent') {
+                diskon_barang = (price * diskonValue) / 100;
+            } else {
+                diskon_barang = diskonValue;
             }
-
+            price -= diskon_barang;
             const total = quantity * price;
-            items.push({ product_id: productId, name: productName, quantity, price, total });
 
+            items.push({ product_id: productId, name: productName, quantity, price, diskon_barang, total });
             updateItemsTable();
-
-            // Reset input fields
-            productDropdown.val('');
-            $('#quantity').val('');
-            priceInput.val('');
         });
 
         // Hapus item dari tabel

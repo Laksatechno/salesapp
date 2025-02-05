@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                     <label for="customer_id">Customer</label>
-                    <select name="customer_id" id="customer_id" class="form-control ">
+                    <select name="customer_id" id="customer_id" class="form-control select2">
                         <option value="">Pilih Customer</option>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                     <label for="product_id">Produk</label>
-                    <select id="product_id" class="form-control">
+                    <select id="product_id" class="form-control select2">
                         <option value="">Pilih Produk</option>
                     </select>
                     @error('product_id')
@@ -54,8 +54,27 @@
                     <label for="quantity">Jumlah</label>
                     <input type="number" id="quantity" class="form-control">
                 </div>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="diskon_type">Jenis Diskon</label>
+                            <select id="diskon_type" class="form-control">
+                                <option value="percent">Persen (%)</option>
+                                <option value="amount">IDR (Rupiah)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="diskon_value">Nilai Diskon</label>
+                            <input type="number" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
                 <button type="button" id="addItem" class="btn btn-primary">Tambah Barang</button>
 
+                <card class="mt-3 table-responsive">
                 <table class="table mt-3" id="itemsTable">
                     <thead>
                         <tr>
@@ -63,11 +82,13 @@
                             <th>Jumlah</th>
                             <th>Harga</th>
                             <th>Total</th>
+                            <th>Diskon/Item</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+                </card>
 
                 <input type="hidden" name="items" id="itemsInput">
                 <div class="form-group">
@@ -75,7 +96,7 @@
                     <select name="due_date" id="due_date" class="form-control">
                         <option value="1">1 Bulan</option>
                         <option value="2">2 Bulan</option>
-                        <option value="3">COD (Bayar di Tempat)</option>
+                        <option value="3">Cash</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -85,80 +106,114 @@
                         <option value="ppn">PPN</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="">Diskon (%) </label>
-                    <input type="text" name="diskon" class="form-control" placeholder="Misal: 10" value="0">
-                </div>
-
                 <button type="submit" class="btn btn-success mt-3">Buat Penjualan</button>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Tambahkan jQuery dan Select2 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    let items = [];
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
-    function updateItemsTable() {
-        const tableBody = $('#itemsTable tbody');
-        tableBody.empty();
-        items.forEach((item, index) => {
-            const row = `<tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>${item.price}</td>
-                <td>${item.total}</td>
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Hapus</button></td>
-            </tr>`;
-            tableBody.append(row);
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Pilih Customer atau Produk",
+            allowClear: true
         });
 
-        $('#itemsInput').val(JSON.stringify(items));
-    }
+        $('#customer_id').change(function () {
+            const customerId = $(this).val();
+            const productDropdown = $('#product_id');
 
-    function removeItem(index) {
-        // Ambil item yang akan dihapus
-        const removedItem = items[index];
+            productDropdown.empty().append('<option value="">Pilih Produk</option>').trigger('change');
 
-        // Kembalikan stok ke dropdown
-        const productOption = $(`#product_id option[value="${removedItem.product_id}"]`);
-        const currentStock = parseInt(productOption.data('stock'), 10);
-        const newStock = currentStock + removedItem.quantity;
+            if (!customerId) {
+                return;
+            }
 
-        // Perbarui stok di atribut data dan teks dropdown
-        productOption.data('stock', newStock);
-        productOption.text(`${removedItem.name} - Stok: ${newStock} - ${removedItem.price.toLocaleString()}`);
+            $.ajax({
+                url: `/customers/${customerId}/products`,
+                type: 'GET',
+                success: function (products) {
+                    products.forEach(product => {
+                        productDropdown.append(`
+                            <option value="${product.product_id}" 
+                                data-name="${product.product.name}" 
+                                data-price="${product.price}" 
+                                data-stock="${product.product.stock}">
+                                ${product.product.name} - Stok: ${product.product.stock} - Rp. ${product.price.toLocaleString()}
+                            </option>
+                        `);
+                    });
+                    productDropdown.trigger('change'); // Refresh Select2
+                },
+                error: function () {
+                    alert('Gagal memuat produk.');
+                }
+            });
+        });
 
-        // Hapus item dari array items
-        items.splice(index, 1);
+        $('#product_id').change(function () {
+            const selectedOption = $(this).find(':selected');
+            const price = selectedOption.data('price') || 0;
+            const stock = selectedOption.data('stock') || 0;
 
-        // Perbarui tabel
-        updateItemsTable();
-        $('#quantity').val('');
-        $('#price').val('');
-        $('#stock').val('');
-        $('#addItem').prop('disabled', true);
+            $('#price').val(price);
+            $('#stock').val(stock);
+            $('#addItem').prop('disabled', stock === 0);
+            $('#quantity').attr('max', stock); // Batasi jumlah sesuai stok
+            $('#quantity').val('');
+        });
 
-    }
+        let items = [];
 
+        function updateItemsTable() {
+            const tableBody = $('#itemsTable tbody');
+            tableBody.empty();
 
-    $('#product_id').change(function () {
-        const selectedOption = $(this).find(':selected');
-        const price = selectedOption.data('price') || 0;
-        const stock = selectedOption.data('stock') || 0;
-        $('#price').val(price);
-        $('#stock').val(stock);
-        $('#addItem').prop('disabled', stock === 0);
-        $('#quantity').attr('max', stock); // Batasi input jumlah sesuai stok
-        $('#quantity').val(''); // Reset jika ada input sebelumnya
-    });
+            items.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price}</td>
+                    <td>${item.total}</td>
+                    <td>${item.diskon_barang}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm removeItem" data-index="${index}">Hapus</button></td>
+                </tr>`;
+                tableBody.append(row);
+            });
 
-    $('#addItem').click(function () {
+            $('#itemsInput').val(JSON.stringify(items));
+        }
+
+        // Fungsi untuk menghapus item dari tabel dan mengembalikan stok
+        $(document).on('click', '.removeItem', function () {
+            const index = $(this).data('index');
+            const removedItem = items[index];
+
+            // Kembalikan stok produk yang dihapus
+            const productOption = $(`#product_id option[value="${removedItem.product_id}"]`);
+            let currentStock = parseInt(productOption.data('stock'), 10);
+            let newStock = currentStock + removedItem.quantity;
+
+            productOption.data('stock', newStock);
+            productOption.text(`${removedItem.name} - Stok: ${newStock} - Rp. ${removedItem.price.toLocaleString()}`);
+
+            // Hapus item dari array
+            items.splice(index, 1);
+            updateItemsTable();
+        });
+
+        $('#addItem').click(function () {
         const productId = $('#product_id').val();
         const productName = $('#product_id option:selected').data('name');
         const quantity = parseInt($('#quantity').val(), 10);
         const price = parseFloat($('#price').val());
+        const diskonType = $('#diskon_type').val();
+        let diskonValue = parseFloat($('#diskon_value').val()) || 0;
         let stock = parseInt($('#product_id option:selected').data('stock'), 10);
 
         if (!productId || !quantity || !price || quantity > stock) {
@@ -166,81 +221,43 @@
             return;
         }
 
-        const total = quantity * price;
+        let total = quantity * price;
+        let diskonBarang = 0;
 
-        // Update stok di dropdown
+        // Perhitungan diskon
+        if (diskonType === "percent") {
+            diskonBarang = (total * diskonValue) / 100;
+        } else if (diskonType === "amount") {
+            diskonBarang = diskonValue;
+        }
+
+        // Pastikan diskon tidak lebih besar dari total harga
+        if (diskonBarang > total) {
+            diskonBarang = total;
+        }
+
+        let totalSetelahDiskon = total - diskonBarang;
         stock -= quantity;
-        $(`#product_id option[value="${productId}"]`).data('stock', stock);
-        $(`#product_id option[value="${productId}"]`).text(`${productName} - Stok: ${stock} - ${price.toLocaleString()}`);
 
-        items.push({ product_id: productId, name: productName, quantity, price, total });
+        $(`#product_id option[value="${productId}"]`).data('stock', stock);
+        $(`#product_id option[value="${productId}"]`).text(`${productName} - Stok: ${stock} - Rp. ${price.toLocaleString()}`);
+
+        items.push({
+            product_id: productId,
+            name: productName,
+            quantity,
+            price,
+            total: totalSetelahDiskon,
+            diskon_barang: diskonBarang
+        });
+
         updateItemsTable();
 
-        // Reset input fields
-        $('#product_id').val('');
+        $('#product_id').val('').trigger('change');
         $('#quantity').val('');
         $('#price').val('');
         $('#stock').val('');
     });
-
-    $('#customer_id').change(function () {
-        const customerId = $(this).val();
-        const productDropdown = $('#product_id');
-
-        productDropdown.empty().append('<option value="">Pilih Produk</option>').select2({
-            placeholder: 'Pilih Produk',
-            allowClear: true,
-        });
-
-        if (!customerId) {
-            return;
-        }
-
-        productDropdown.change(function () {
-            const selectedOption = $(this).find(':selected');
-            const price = selectedOption.data('price') || 0;
-            const stock = selectedOption.data('stock') || 0;
-            $('#price').val(price);
-            $('#stock').val(stock);
-            $('#addItem').prop('disabled', stock === 0);
-            $('#quantity').attr('max', stock); // Batasi input jumlah sesuai stok
-        })
-            $.ajax({
-                url: `/customers/${customerId}/products`,
-                type: 'GET',
-                success: function (products) {
-                    products.forEach(product => {
-                        productDropdown.append(`
-                            <option value="${product.product_id}" data-name="${product.product.name}" data-price="${product.price}" data-stock="${product.product.stock}">
-                                ${product.product.name} - Stok: ${product.product.stock} - ${product.price.toLocaleString()}
-                            </option>
-                        `);
-                    });
-                },
-                error: function () {
-                    alert('Gagal memuat produk.');
-                }
-            });
-
-        // if (customerId) {
-        //     $.ajax({
-        //         url: `/customers/${customerId}/products`,
-        //         type: 'GET',
-        //         success: function (products) {
-        //             products.forEach(product => {
-        //                 productDropdown.append(`
-        //                     <option value="${product.product_id}" data-name="${product.product.name}" data-price="${product.price}" data-stock="${product.product.stock}">
-        //                         ${product.product.name} - Stok: ${product.product.stock} - ${product.price.toLocaleString()}
-        //                     </option>
-        //                 `);
-        //             });
-                    
-        //         },
-        //         error: function () {
-        //             alert('Gagal memuat produk.');
-        //         }
-        //     });
-        // }
     });
 </script>
 @endsection

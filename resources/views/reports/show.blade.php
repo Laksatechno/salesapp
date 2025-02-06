@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 @section('header')
     @include('layouts.appheaderback')
@@ -9,62 +8,174 @@
     <div class="card">
         <div class="card-body table-responsive">
             <h2>Penjualan untuk Produk: {{ $product->name }}</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Invoice Number</th>
-                        <th>Customer</th>
-                        <th>Produk</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Tanggal</th>
-                        <th>Marketing</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($sales as $sale)
-                        @foreach ($sale->details as $detail)
-                            @if ($detail->product_id == $product->id)
-                                <tr>
-                                    <td>{{ $sale->invoice_number }}</td>
-                                    <td>{{ $sale->customer->name ?? $sale->users->name }}</td>
-                                    <td>{{ $detail->product->name }}</td>
-                                    <td>{{ $detail->quantity }}</td>
-                                    <td>Rp {{ number_format($detail->total) }}</td>
-                                    <td>{{ $sale->created_at->format('d-m-Y') }}</td>
-                                    <td>{{ $sale->marketing->name }}</td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Tidak ada data penjualan untuk produk ini.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            {{-- create table total sales kesuluruhan --}}
-            <table class="table mt-3">
-                <thead>
-                    <tr>
-                        <th style="text-align: right;">Total Penjualan Keseluruhan {{ $product->name }}</th>
-                        @php 
-                            $total = 0;
-                            foreach ($sales as $sale) {
-                                foreach ($sale->details as $detail) {
-                                    if ($detail->product_id == $product->id) {
-                                        $total += $detail->total;
-                                    }
-                                }
-                            }
-                        @endphp
-                        <th style="text-align: right;">Rp {{$total}}</th>
-                    </tr>
-                </thead>
-            </table>
 
+            {{-- Input pencarian dan filter marketing --}}
             
+            <form id="filter-form" method="GET" action="{{ route('reports.show' , $product->id) }}">
+                <div class="row">
+                    <!-- Input Search -->
+                    <div class="col-md-3 form-group">
+                        <input type="text" name="search" class="form-control search" placeholder="Cari invoice atau customer..." value="{{ request('search') }}">
+                    </div>
+                    
+                    <!-- Rentang Waktu -->
+                    <div class="form-group col-md-3">
+                        <select name="date_range" id="date-range" class="form-control">
+                            <option value="this_month" {{ request('date_range') == 'this_month' ? 'selected' : '' }}>Bulan Ini</option>
+                            <option value="custom_range" {{ request('date_range') == 'custom_range' ? 'selected' : '' }}>Pilih Rentang Tanggal</option>
+                        </select>
+                    </div>
+
+                    <!-- Input DateRangePicker -->
+                    <div class="form-group col-md-3" id="custom-date-range-container" style="{{ request('date_range') == 'custom_range' ? '' : 'display: none;' }}">
+                        <input type="text" name="date_range_picker" id="date-range-picker" class="form-control" placeholder="Tanggal Mulai - Tanggal Akhir">
+                        <input type="hidden" name="start_date" id="start-date" value="{{ request('start_date') }}">
+                        <input type="hidden" name="end_date" id="end-date" value="{{ request('end_date') }}">
+                    </div>
+
+                    <!-- Jenis Transaksi -->
+                    <div class="form-group col-md-3">
+                        <select name="transaction_type" id="transaction-type" class="form-control">
+                            <option value="">Semua Transaksi</option>
+                            <option value="customer" {{ request('transaction_type') == 'customer' ? 'selected' : '' }}>Customer</option>
+                            <option value="user" {{ request('transaction_type') == 'user' ? 'selected' : '' }}>User</option>
+                        </select>
+                    </div>
+
+                    <!-- Marketing -->
+                    @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'keuangan')
+                    <div class="form-group col-md-3">
+                        <select name="marketing_id" id="marketing-id" class="form-control">
+                            <option value="">Pilih Marketing</option>
+                            @foreach ($marketings as $marketing)
+                            <option value="{{ $marketing->id }}" {{ request('marketing_id') == $marketing->id ? 'selected' : '' }}>{{ $marketing->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
+                </div>
+            </form>
+            <div id="sales-list" class="transactions">
+                @include('reports.partials.salesbyproduct', ['sales' => $sales, 'product' => $product])
+            </div>
         </div>
     </div>
 </div>
+
 @endsection
+
+
+@push ('custom-scripts')
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- DateRangePicker CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Moment.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<!-- DateRangePicker JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+
+<script>
+    
+    $(document).ready(function() {
+        $('#date-range-picker').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear',
+                format: 'YYYY-MM-DD'
+            }
+        });
+            // Event ketika rentang tanggal dipilih
+            $('#date-range-picker').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#start-date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#end-date').val(picker.endDate.format('YYYY-MM-DD'));
+            loadSales(); // Muat ulang data penjualan
+        });
+
+        // Event ketika rentang tanggal dihapus
+        $('#date-range-picker').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            $('#start-date').val('');
+            $('#end-date').val('');
+            loadSales(); // Muat ulang data penjualan
+        });
+
+
+        // Fungsi untuk memuat data penjualan berdasarkan filter
+        function loadSales() {
+            const formData = $('#filter-form').serialize(); // Ambil data form
+            console.log(formData);
+            $.ajax({
+                url: '{{ route("reports.index") }}',
+                method: 'GET',
+                data: formData,
+                success: function (response) {
+                    $('#sales-list').html(response); // Perbarui daftar penjualan
+                    console.log(response.sales);
+                },
+                error: function (xhr) {
+                    alert('Terjadi kesalahan saat memuat data.');
+                }
+            });
+        }
+
+        // Event listener untuk perubahan pada input filter
+        $('.search, #date-range, #transaction-type, #marketing-id').on('input change', function () {
+            loadSales(); // Muat ulang data penjualan
+        });
+
+        // Toggle input rentang tanggal
+        $('#date-range').on('change', function () {
+            if ($(this).val() === 'custom_range') {
+                $('#custom-date-range-container').show();
+            } else {
+                $('#custom-date-range-container').hide();
+            }
+        });
+
+        // Handle tombol cetak PDF
+    // $('#print-pdf-btn').click(function () {
+    //     const formData = $('#filter-form').serialize(); // Ambil data form
+
+    //     // Kirim data filter ke server menggunakan AJAX
+    //     $.ajax({
+    //         url: '{{ route("reports.print") }}',
+    //         method: 'POST',
+    //         data: formData,
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
+    //         },
+    //         xhrFields: {
+    //             responseType: 'blob' // Mengindikasikan respons adalah file binary
+    //         },
+    //         success: function (response) {
+    //             // Buat URL dari blob
+    //             const blob = new Blob([response], { type: 'application/pdf' });
+    //             const url = window.URL.createObjectURL(blob);
+
+    //             // Buka PDF di tab baru
+    //             window.open(url, '_blank');
+
+    //             // Bersihkan URL setelah digunakan
+    //             window.URL.revokeObjectURL(url);
+    //         },
+    //         error: function (xhr) {
+    //             alert('Terjadi kesalahan saat mencetak PDF.');
+    //         }
+    //     });
+    // });
+
+    });
+
+</script>
+@endpush

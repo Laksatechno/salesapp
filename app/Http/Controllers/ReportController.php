@@ -153,16 +153,66 @@ class ReportController extends Controller
     return $pdf->stream('laporan_penjualan.pdf');
 }
 
-    public function show($product_id)
+    public function show($product_id, Request $request)
     {
-        // Filter penjualan berdasarkan product_id
-        $sales = Sale::whereHas('details', function ($query) use ($product_id) {
+        // Ambil data produk
+        $product = Product::findOrFail($product_id);
+
+        // Query dasar untuk penjualan
+        $salesQuery = Sale::whereHas('details', function ($query) use ($product_id) {
             $query->where('product_id', $product_id);
-        })->with(['details.product', 'marketing'])->get();
-    
-        $product = Product::findOrFail($product_id); // Mengambil nama produk untuk ditampilkan di view
-        return view('reports.show', compact('sales', 'product'));
+        })->with(['details.product', 'marketing', 'customer', 'users']);
+
+        // Filter berdasarkan marketing (bisa lebih dari satu)
+        if ($request->has('marketing_id') && !empty($request->marketing_id)) {
+            $salesQuery->whereIn('marketing_id', $request->marketing_id);
+        }
+
+        // Filter berdasarkan rentang tanggal
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $salesQuery->whereBetween('created_at', [
+                $request->start_date,
+                $request->end_date
+            ]);
+        }
+
+        // Filter untuk bulan ini
+        if ($request->has('this_month') && $request->this_month == '1') {
+            $salesQuery->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year);
+        }
+
+        // Filter berdasarkan pencarian
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $salesQuery->where(function ($query) use ($search) {
+                $query->where('invoice_number', 'like', "%$search%")
+                    ->orWhereHas('customer', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('users', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%");
+                    });
+            });
+        }
+
+        // Ambil data penjualan
+        $sales = $salesQuery->get();
+
+        // Jika request via AJAX, kembalikan JSON
+        if ($request->ajax()) {
+            return response()->json([
+                'sales' => view('reports.partials.salesbyproduct', compact('sales', 'product'))->render()
+            ]);
+        }
+
+        // Ambil daftar marketing untuk checkbox
+        $marketings = User::where('role', 'marketing')->get();
+
+        return view('reports.show', compact('sales', 'product', 'marketings'));
     }
+
+
 
     public function reportbycustomer($customer_id)
     {

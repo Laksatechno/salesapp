@@ -26,18 +26,21 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!Auth::check()) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
 
-        $user = Auth::user();
+        $userRole = Auth::user()->role;
 
-        foreach ($roles as $role) {
-            if ($user->hasRole($role)) {
-                return $next($request);
-            }
+        if (!in_array($userRole, $roles)) {
+            // Simpan URL sebelumnya ke dalam session
+            session()->put('previousUrl', url()->previous());
+
+            // Redirect ke halaman sebelumnya
+            return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        abort(403, 'Unauthorized action.');
+
+        return $next($request);
     }
     
 }

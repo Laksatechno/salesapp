@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ProductController;
@@ -27,6 +30,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Auth::routes();
 Route::middleware('guest')->group(function () {
     #Route Login
     Route::get('/', function () {
@@ -159,11 +164,11 @@ Route::middleware(['auth', 'role:customer,superadmin, admin'])->group(function (
 });
 
 // Authentication Routes
-Route::prefix('login')->group(function () {
-    Route::get('/', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/', [AuthController::class, 'login']);
-});
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+// Route::prefix('login')->group(function () {
+//     Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+//     Route::post('/', [AuthController::class, 'login']);
+// });
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Registration Routes
 Route::prefix('register')->group(function () {

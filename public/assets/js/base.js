@@ -21,12 +21,12 @@ const laksamedical = {
     Dark_Mode: {
         default: false, // Set dark mode as main theme
         local_mode: { // Activate dark mode between certain times of the day
-            enable: false, // Enable or disable local dark mode
+            enable: true, // Enable or disable local dark mode
             start_time: 20, // Start at 20:00
             end_time: 7, // End at 07:00
         },
         auto_detect: { // Auto detect user's preferences and activate dark mode
-            enable: false,
+            enable: true,
         }
     },
     //-------------------------------------------------------------------
@@ -37,7 +37,7 @@ const laksamedical = {
     //-------------------------------------------------------------------
     // Animations
     Animation: {
-        goBack: false, // Go back page animation
+        goBack: true, // Go back page animation
     },
     //-------------------------------------------------------------------
     // Test Mode

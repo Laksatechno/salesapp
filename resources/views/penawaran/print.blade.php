@@ -33,7 +33,7 @@
         }
 
         header img {
-            width: 100px;
+            width: 150px;
             height: auto;
         }
 
@@ -155,12 +155,12 @@
 </head>
 <body>
     <div class="container">
-        {{-- <header>
-            <img src="{{ URL::asset('assets/images/logo_ptlmi2.webp')}}" alt="Logo">
-        </header> --}}
+        <header>
+            <img src="{{ public_path('assets/img/logo_ptlmi.webp') }}" alt="Logo">
+        </header>
 
-        <div align="center" style="margin: 40px 0;">
-            <img src="{{ url('assets/img/icon/512x512.png')}}" width="200px" height="auto">
+        <div align="center" style="margin: 100px">
+            <img src="{{ public_path('assets/img/icon/512x512.png') }}" width="100%" height="auto">
         </div>
 
         <div>
@@ -171,13 +171,13 @@
         <footer>
             <h4>PT Laksa Medika Internusa</h4>
             <p>Jl. Amarta No.50 RT01, RW.01, Pelem, Baturetno, Kec. Banguntapan, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55198</p>
-            <p>Telepon : 0274 443 6047 | Email : laksamedikainternusa@gmail.com</p>
+            <p>Telepon : 0274 443 6047 | Email : laksamedikainternusa@gmail.com | Website : www.laksamedical.com</p>
         </footer>
     </div>
 
     <div class="page_break">
         <header>
-            <img src="{{ url('assets/img/logo_ptlmi.webp')}}" alt="Logo">
+            <img src="{{ public_path('assets/img/logo_ptlmi.webp') }}" alt="Logo">
         </header>
 
         <p style="font-size: 14px; margin: 10px;">
@@ -235,14 +235,18 @@
         </p>
 
         <div class="signature">
-            <img src="assets/img/ttd.webp" alt="Tanda Tangan">
+            {{-- <img src="assets/img/ttd.webp" alt="Tanda Tangan"> --}}
+            <p style="font-size: 12px; margin: 10px;">Hormat Kami,</p>
+            <br>
+            <br>
+            <br>
             <b>Yandi Okta Wirawan</b>
             <b>PT. Laksa Medika Internusa</b>
         </div>
 
         <footer>
             <b>Jl. Amarta No.50 RT01, RW.01, Pelem, Baturetno, Kec. Banguntapan, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55198</b><br>
-            <b>Telepon : 0274 443 6047 | Email : laksamedikainternusa@gmail.com</b>
+            <b>Telepon : 0274 443 6047 | Email : laksamedikainternusa@gmail.com | Website : www.laksamedical.com</b>
         </footer>
     </div>
 </body>

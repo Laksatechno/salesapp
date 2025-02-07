@@ -77,8 +77,8 @@
                 <table style="width: 100%; border-collapse: collapse; border: none;">
                     <tr style="border: none;">
                         <td style="text-align: left; border: none; padding: none;">
-                            {{-- <img align="left" src="{{ public_path('assets/img/logo_ptlmi.webp') }}" width="150px" height="30px">
-                            <img align="left" src="{{ public_path('assets/img/logo_ptlmi.webp') }}" width="150px" height="30px"> --}}
+                            {{-- <img align="left" src="{{ public_path('assets/img/logo_ptlmi.webp') }}" width="150px" height="30px"> --}}
+                            <img align="left" src="{{ public_path('assets/img/logo_ptlmi.webp') }}" width="150px" height="30px">
 
                         </td>
                         <td style="text-align: right; border: none; font-weight: bold;">FAKTUR</td>
@@ -88,13 +88,13 @@
             <thead>
                  <tr>
                     <td colspan="2" align="left">
-                        <!--<h4>Dari</h4>-->
+                        {{-- <h4>Dari</h4> --}}
                         <p>PT Laksa Medika Internusa<br>
                            Pelem Lor No.50 Bantul Yogyakarta<br>
                         </p>
                     </td>
                     <td colspan="3">
-                        <!--<h4>Untuk : </h4>-->
+                        {{-- <h4>Untuk : </h4> --}}
                         <p>{{ $customer->name ?? $sale->users->name }}<br>
                         {{ $customer->address ?? $sale->users->address }}<br>
                         {{ $customer->phone ?? $sale->users->no_hp }} <br>
@@ -103,10 +103,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <th colspan="1" align="left">Invoice <strong>#00{{ $sale->invoice_number}}</strong></th>
-                    <th colspan="2" align="center">Jatuh Tempo : {{$sale->due_date}}</th>
+                    <th colspan="1" align="left">NO INV <strong>#{{ $sale->invoice_number}}</strong></th>
+                    <th colspan="2" align="center">Jatuh Tempo : {{ tgl_ind($sale->due_date)}}</th>
                     <th colspan="1" align="right"> Tanggal : {{ $sale->created_at->format('d-m-Y') }}</th>
-                    <th colspan="1">Marketing#{{$sale->user->name}}</th>
+                    <th colspan="1">Marketing :{{$sale->user->name}}</th>
                 </tr>
             </thead>
                     </table><br>
@@ -170,12 +170,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <th colspan="2" align="center">Penerima</th>
-                    <th colspan="3" align="center">Hormat Kami</th>
+                    <th colspan="2" align="center" style="text-align: center;">Penerima</th>
+                    <th colspan="3" align="center" style="text-align: center;">Hormat Kami</th>
             </tr>
              <tr>
-                    <td colspan="2" align="center"><br>(....................)</td>
-                    <td colspan="3" align="center"><br>(Fatmawaty Aripin)</td>
+                    <td colspan="2" align="center" style="text-align: center;"><br><br><br>(....................)</td>
+                    <td colspan="3" align="center" style="text-align: center;"><br><br><br>(Fatmawaty Aripin)</td>
             </tr>
             </tfoot>
         </table>
@@ -191,14 +191,23 @@
             <thead>
                 <tr>
                     <th colspan="5">
-
-                    {{-- <img align="left" src="{{ public_path('assets/images/logo_ptlmi.webp')}}" width="185px" height="30px"><br> --}}
-                    <p align="right">
-                        Pelem Lor No. 50 Baturetno, Banguntapan<br>
-                        Bantul, DI. Yogyakarta. Telp/Fax +622742842046
-                    </p>
-                    <H1 align="center">TANDA TERIMA FAKTUR</H1><br>
-                    <h3 align="left">Nama Outlet : {{ $customer->name ?? $sale->users->name }}</h3>
+                        <!-- Judul di tengah -->
+                        <h1 align="center">TANDA TERIMA FAKTUR</h1>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <!-- Konten di kiri -->
+                            <div style="text-align: left;">
+                                <h3>Nama Outlet : {{ $customer->name ?? $sale->users->name }}</h3>
+                            </div>
+            
+                            <!-- Konten di kanan -->
+                            <div style="text-align: right;">
+                                <p>
+                                    Pelem Lor No. 50 Baturetno, Banguntapan<br>
+                                    Bantul, DI. Yogyakarta. Telp/Fax +622742842046
+                                </p>
+                            </div>
+                        </div>
+            
                     </th>
                 </tr>
             </thead>
@@ -214,24 +223,24 @@
                 <tr>
                     <td align="center" scope="row">{{ $no }}</td>
                     <td align="center">{{ $sale->invoice_number }}</td>
-                    <td align ="center">{{ $sale->created_at->format('d-m-Y') }}</td>
-                    <td align ="center">{{ $sale->due_date }}</td>
+                    <td align ="center">{{ tgl_ind($sale->created_at) }}</td>
+                    <td align ="center">{{ tgl_ind($sale->due_date) }}</td>
                     <td align ="right">Rp {{ number_format($sale->total + $sale->tax - $sale->diskon) }}</td>
                 </tr>
                 <?php $no++ ;?>
                 <tr>
-                    <th colspan="4">Total Tagihan</th>
+                    <th colspan="4" style="text-align: right;">Total Tagihan</th>
                     <td align ="right">Rp {{ number_format($sale->total + $sale->tax - $sale->diskon) }}</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="2" align="center">Penerima</th>
-                    <td colspan="3" align="center">Yogyakarta, </td>
+                    <th colspan="2" style="text-align: center;" >Penerima</th>
+                    <td colspan="3" style="text-align: center;">Yogyakarta, </td>
             </tr>
              <tr>
-                    <td colspan="2" align="center"><br><br>(....................)</td>
-                    <td colspan="3" align="center"><br><br>(Fatmawaty Aripin)</td>
+                    <td colspan="2" style="text-align: center;"><br><br><br>(....................)</td>
+                    <td colspan="3" style="text-align: center;"><br><br><br>(Fatmawaty Aripin)</td>
             </tr>
             </tfoot>
         </Table>
@@ -286,14 +295,11 @@
                 <th align ="center">Nama Barang</th>
                 <th align ="center">Jumlah</th>
             </tr>
-            @foreach ($details as $detail)
-            @php
-                $no++
-            @endphp
+            @foreach ($details as $e => $row)
             <tr>
-                <td align="center" scope="row">{{ $no }}</td>
-                <td>{{ $detail->product->name }}</td>
-                 <td align ="center">{{ $detail->quantity }}</td>
+                <td align="center" scope="row">{{ $e+1 }}</td>
+                <td>{{ $row->product->name }}</td>
+                 <td align ="center">{{ $row->quantity }}</td>
             </tr>
             @endforeach
             <tr>
@@ -305,13 +311,13 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="1"align="center">Penerima</td>
-                <td colspan="2"align="center">PT.Laksa Medika Internusa<br>Admin Logistik</td>
+                <td colspan="1" style="text-align: center;">Penerima</td>
+                <td colspan="2" style="text-align: center;">PT.Laksa Medika Internusa<br>Admin Logistik</td>
                 {{-- {{ date('d F Y') }} --}}
         </tr>
          <tr>
-                <td colspan="1" align="center"><br><br>(....................)</td>
-                <td colspan="2" align="center"><br><br>(Puspita Tara Wahyuningsih)</td>
+                <td colspan="1" style="text-align: center;"><br><br><br>(....................)</td>
+                <td colspan="2" style="text-align: center;"><br><br><br>(Puspita Tara Wahyuningsih)</td>
         </tr>
         </tfoot>
         
@@ -351,13 +357,13 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="1"align="center">Penerima</td>
-                <td colspan="2"align="center">Yang Menyerahkan, </td>
+                <td colspan="1" style="text-align: center;">Penerima</td>
+                <td colspan="2" style="text-align: center;">Yang Menyerahkan, </td>
                 {{-- {{ date('d F Y') }} --}}
         </tr>
          <tr>
-                <td colspan="1" align="center"><br><br>( Drajad Dwi Haryoko )</td>
-                <td colspan="2" align="center"><br><br>(Puspita Tara Wahyuningsih)</td>
+                <td colspan="1" style="text-align: center;"><br><br>( Drajad Dwi Haryoko )</td>
+                <td colspan="2" style="text-align: center;"><br><br>(Puspita Tara Wahyuningsih)</td>
         </tr>
         </tfoot>
         

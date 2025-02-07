@@ -55,14 +55,14 @@
                                                     <h5 class="modal-title" id="updateStatusLabel{{ $sale->id }}">Update Status Penjualan</h5>
                                                     {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                                                 </div>
-                                                <form action="{{ route('sales.updateStatus', $sale->id) }}" method="POST">
+                                                <form id="updateStatusForm" data-action="{{ route('sales.updateStatus', $sale->id) }}">
                                                     @csrf
-                                                    @method('PUT')
+                                                    {{-- @method('PUT') --}}
                                                     <div class="modal-body">
                                                         <p>Apakah Anda yakin ingin mengubah status menjadi <strong>Complete</strong>?</p>
                                                     </div>
                                                     {{-- create select option pending , complete --}}
-                                                    <div class="form-group">
+                                                    <div class="form-group mb-3">
                                                         <label for="status">Status</label>
                                                         <select name="status" id="status" class="form-control">
                                                             <option value="pending">Pending</option>
@@ -191,6 +191,41 @@
     <script>
         $(document).ready(function() {
             $('#salesTable').DataTable();
+
+            $("#updateStatusForm").submit(function(e) {
+            e.preventDefault(); // Mencegah reload halaman
+
+            let form = $(this);
+            let url = form.data('action');
+            let formData = form.serialize();
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formData,
+                beforeSend: function() {
+                    // Bisa tambahkan loading spinner di sini jika perlu
+
+                },
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Status berhasil diperbarui.',
+                    }).then(() => {
+                        location.reload(); // Reload halaman jika diperlukan
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: 'Terjadi kesalahan. Coba lagi!',
+                    });
+                }
+            });
+        });
+
             $('.kirim-barang-btn').on('click', function() {
                 var invoiceId = $(this).data('invoice-id');
                 console.log(invoiceId);

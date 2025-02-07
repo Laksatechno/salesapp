@@ -84,7 +84,7 @@ class PenawaranController extends Controller
                 'penawaran_id' => $penawarans->id,
             ]);
             //REDIRECT KEMBALI KE HALAMAN /PRODUCT DENGAN FLASH MESSAGE SUCCESS
-            return redirect()->route('detail.penawaran', $penawarans->id)->with(['success' => '<strong>' . $penawarans->customer . '</strong> Penawaran Telah dibuat']);
+            return redirect()->route('detail.penawaran', $penawarans->id)->with(['success' => '' . $penawarans->customer . ' Penawaran Telah dibuat']);
         } catch (\Exception $e) {
             //APABILA TERDAPAT ERROR MAKA REDIRECT KE FORM INPUT
             //DAN MENAMPILKAN FLASH MESSAGE ERROR
@@ -206,7 +206,8 @@ public function printpenawaran($id)
     $pdf = PDF::loadView('penawaran.print', compact('kondisis', 'hargapenawarans', 'penawarans'))->setPaper('a4', 'portrait');
 
     // Save or stream the PDF
-    return $pdf->download($fileName);
+    // return $pdf->download($fileName);
+    return $pdf->stream($fileName);
     
 }
 

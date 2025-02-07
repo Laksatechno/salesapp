@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('harga_penawarans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('penawaran_id');
-            $table->unsignedBigInteger('product_id');
-            $table->decimal('price', 15, 2);
-            $table->integer('qty');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->bigInteger('price')->nullable();
+            $table->string('qty')->nullable();
             $table->timestamps();
-
             $table->foreign('penawaran_id')->references('id')->on('penawarans')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });

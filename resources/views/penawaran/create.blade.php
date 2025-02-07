@@ -21,17 +21,17 @@
                             @csrf
                             <div class="form-group">
                                 <label for="">Customer</label>
-                                <input type="text" name="customer" class="form-control {{ $errors->has('customer') ? 'is-invalid':'' }}" placeholder="Contoh : PMI Yogyakarta" required>
+                                <input type="text" name="customer" class="form-control {{ $errors->has('customer') ? 'is-invalid':'' }}" placeholder="Contoh : PMI Yogyakarta">
                                 <p class="text-danger">{{ $errors->first('customer') }}</p>
                             </div>
                             <div class="form-group">
                                 <label for="">Alamat</label>
-                                <input type="text" name="address" col="3" rows="3" class="form-control  {{ $errors->has('address') ? 'is-invalid':'' }}"placeholder="Alamat Outlet" required>
+                                <input type="text" name="address" col="3" rows="3" class="form-control  {{ $errors->has('address') ? 'is-invalid':'' }}"placeholder="Alamat Outlet">
                                 <p class="text-danger">{{ $errors->first('address') }}</p>
                             </div>
                             <div class="form-group">
                                 <label for="">Perihal</label>
-                                <input type="text" name="perihal" class="form-control {{ $errors->has('perihal') ? 'is-invalid':''  }}" placeholder="Contoh : Penawaran Blood Bag" required>
+                                <input type="text" name="perihal" class="form-control {{ $errors->has('perihal') ? 'is-invalid':''  }}" placeholder="Contoh : Penawaran Blood Bag">
                                 <p class="text-danger">{{ $errors->first('perihal') }}</p>
                             </div>
                             <button class="btn btn-primary btn-sm btn-block">Tambah</button>

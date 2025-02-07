@@ -17,11 +17,14 @@
                     <th>Customer</th>
                     <td>{{ $sale->customer->name ?? $sale->users->name }}</td>
                 </tr>
-
+                <tr>
+                    <th>Marketing</th>
+                    <td>{{ $sale->marketing->name }}</td>
+                </tr>
 
                 <tr>
                     <th>Jatuh Tempo</th>
-                    <td>{{ $sale->due_date}}</td>
+                    <td>{{ tgl_ind($sale->due_date)}}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
@@ -40,6 +43,10 @@
                 <tr>
                     <th>Tax</th>
                     <td>{{ $sale->tax_status == 'ppn' ? number_format($sale->tax) : '0' }}</td>
+                </tr>
+                <tr>
+                    <th>Diskon</th>
+                    <td>{{ number_format($sale->diskon) }}</td>
                 </tr>
                 <tr>
                     <th>SubTotal</th>

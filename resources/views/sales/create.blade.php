@@ -120,8 +120,8 @@
 <script>
     $(document).ready(function () {
         $('.select2').select2({
-            placeholder: "Pilih Customer atau Produk",
-            allowClear: true
+            // placeholder: "Pilih Customer atau Produk",
+            // allowClear: true
         });
 
         $('#customer_id').change(function () {

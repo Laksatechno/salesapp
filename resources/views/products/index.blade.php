@@ -23,8 +23,8 @@
                     <tr>
                         <th>Nama</th>
                         {{-- <th>Harga</th> --}}
-                        <th>Stock</th>
-                        <th>Aksi</th>
+                        <th style="width: 20%">Stock</th>
+                        <th style="width: 10%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

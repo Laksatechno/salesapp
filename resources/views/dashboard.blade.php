@@ -2,6 +2,12 @@
 @section ('header')
 @include ('layouts.appheader')
 @endsection
+@push ('custom-styles')
+<style>
+    a {
+        text-decoration: none;
+    }
+</style>
 @section('content')
     <div class="section wallet-card-section pt-1">
         <div class="wallet-card">

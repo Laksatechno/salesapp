@@ -13,7 +13,7 @@
     <!-- Favicons -->
     <link rel="shortcut icon" href="{{ url('/content/favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ url('/content/favicon.png') }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ url('/ontent/favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ url('/content/favicon.png') }}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ url('content/favicon.png') }}">
 
     <meta name="robots" content="index, follow">
@@ -24,8 +24,8 @@
     <meta name="copyright" content="{{ config('app.name') }}">
     <meta itemprop="image" content="content/meta-tag.jpg">
 
-    <link rel="stylesheet" href="{{ url('/assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ url('/assets/css/custom.css') }}">
+    {{-- <link rel="stylesheet" href="{{ url('/assets/css/style.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ url('/assets/css/custom.css') }}"> --}}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     
         <link rel="stylesheet" href="{{ url('/assets/plugins/datepicker/datepicker3.css') }}">

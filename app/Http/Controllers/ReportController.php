@@ -207,7 +207,9 @@ class ReportController extends Controller
         }
 
         // Ambil daftar marketing untuk checkbox
-        $marketings = User::where('role', 'marketing')->get();
+        $marketings = User::where('role', '!=', 'customer')
+        ->whereIn('role', ['marketing', 'superadmin', 'admin', 'keuangan'])
+        ->get();
 
         return view('reports.show', compact('sales', 'product', 'marketings'));
     }

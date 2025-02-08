@@ -242,6 +242,19 @@ class SaleController extends Controller
         $finalTotal = $subTotal;
     }
 
+    $dueDate = null;
+    $tanggal = Carbon::parse($request->tanggal); // Konversi string menjadi objek Carbon
+    
+    if ($request->due_date === '1') {
+        $dueDate = $tanggal->copy()->addMonth(); // Tambah 1 bulan
+    } elseif ($request->due_date === '2') {
+        $dueDate = $tanggal->copy()->addMonths(2); // Tambah 2 bulan
+    }
+        
+    // dd($dueDate);
+        
+    
+
     // $tax = $finalTotal * ($request->tax_status == 'ppn' ? 0.12 : 0) ;
     // Update data penjualan
     $sale->update([
@@ -252,6 +265,7 @@ class SaleController extends Controller
         'total' => $finalTotal,
         'status' => 'pending',
         'tanggal' => $request->tanggal,
+        'due_date' => $dueDate,
     ]);
 
     // dd ($sale);

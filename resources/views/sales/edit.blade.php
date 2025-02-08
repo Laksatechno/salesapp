@@ -103,6 +103,14 @@
                 })) }}">
 
                 <div class="form-group">
+                    <label for="due_date">Jenis Tempo</label>
+                    <select name="due_date" id="due_date" class="form-control">
+                        <option value="1">1 Bulan</option>
+                        <option value="2">2 Bulan</option>
+                        <option value="3">Cash</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="tax_status">Tax Status</label>
                     <select name="tax_status" id="tax_status" class="form-control">
                         <option value="non-ppn" {{ $sale->tax_status == 'non-ppn' ? 'selected' : '' }}>Non-PPN</option>

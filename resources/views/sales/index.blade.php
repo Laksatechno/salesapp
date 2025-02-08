@@ -350,7 +350,7 @@
                 });
             }
     </script>
-    <script>
+    {{-- <script>
         // Tangani submit form update status
         document.querySelectorAll('form[id^="updateStatusForm"]').forEach(form => {
             form.addEventListener('submit', function(event) {
@@ -397,6 +397,6 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 @endpush
 @endsection

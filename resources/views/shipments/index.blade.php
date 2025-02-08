@@ -4,8 +4,10 @@
 @endsection
 @section('content')
 <div class="section mt-2">
-        <div class="card-body table-responsive">
-            <h2>Pengiriman</h2>
+    <div class="section-heading">
+        <h2 class="title">Pengiriman</h2>
+    </div>
+        <div class="transaction">
 
             @if (session('success'))
                 <div class="alert alert-success mt-3">
@@ -41,7 +43,7 @@
                         </button> --}}
                         {{-- @if (!$shipment->statuses->last()->status == 'Barang Sudah Sampai') --}}
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#DialogForm{{$shipment->id}}">
-                            Update Status 2
+                            Update Status
                         </button>
                         {{-- @endif --}}
                                 <!-- Dialog  -->

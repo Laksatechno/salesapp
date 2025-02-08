@@ -105,7 +105,7 @@
                 <tr>
                     <th colspan="1" align="left">NO INV <strong>#{{ $sale->invoice_number}}</strong></th>
                     <th colspan="2" align="center">Jatuh Tempo : {{ tgl_ind($sale->due_date)}}</th>
-                    <th colspan="1" align="right"> Tanggal : {{ $sale->created_at->format('d-m-Y') }}</th>
+                    <th colspan="1" align="right"> Tanggal : {{ tgl_ind($sale->tanggal) }}</th>
                     <th colspan="1">Marketing :{{$sale->user->name}}</th>
                 </tr>
             </thead>
@@ -223,7 +223,7 @@
                 <tr>
                     <td align="center" scope="row">{{ $no }}</td>
                     <td align="center">{{ $sale->invoice_number }}</td>
-                    <td align ="center">{{ tgl_ind($sale->created_at) }}</td>
+                    <td align ="center">{{ tgl_ind($sale->tanggal) }}</td>
                     <td align ="center">{{ tgl_ind($sale->due_date) }}</td>
                     <td align ="right">Rp {{ number_format($sale->total + $sale->tax - $sale->diskon) }}</td>
                 </tr>
@@ -255,7 +255,7 @@
             <p align="left" style="font-size: 14px; margin:5px;">Uang Sejumlah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<b>
                 {{ terbilang($sale->total + $sale->tax - $sale->diskon) }}
                 </b></p><hr align="right"  width="70%" style="margin-left:21%">
-                <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. {{ $sale->invoice_number }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ \Carbon\Carbon::parse($sale->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</p><hr align="right"  width="70%" style="margin-left:21%">
+                <p align="left" style="font-size: 14px; margin:5px">Guna Membayar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;Pembayaran Faktur No. {{ $sale->invoice_number }}&nbsp;&nbsp;&nbsp;Tanggal Faktur {{ tgl_ind($sale->tanggal)  }}</p><hr align="right"  width="70%" style="margin-left:21%">
                 <p align="left" style="font-size: 14px; margin:5px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp; 
                     @if ($sale->tenggat)
                     Tanggal Jatuh Tempo{{ \Carbon\Carbon::parse($invoice->due_date)->locale('id_ID')->isoFormat('dddd, D MMM YYYY') }}
@@ -267,7 +267,7 @@
                 </p>
                 <p align="right" style="font-size: 14px; margin:5px; height:5%">
                     Yogyakarta,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>PT. Laksa Medika Internusa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <!--{{ $sale->created_at->format('D, d M Y') }}-->
+                    <!--{{ tgl_ind($sale->tanggal) }}-->
                 </p><br><br><br><br><br>
                 <p align="right" style="font-size: 14px; margin:5px;">
                     (Fatmawaty Aripin)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -285,7 +285,7 @@
             <p align="left" style="font-size: 12px;">INVOICE #{{ $sale->invoice_number }}</p>
             <p align="left" style="font-size: 12px;">Telah Terima dari PT. Laksa Medika Internusa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($sale->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ tgl_ind($sale->tanggal) }}</h3> 
         </th>
         </tr>
         </thead>
@@ -331,7 +331,7 @@
         <th colspan="3">
             <h1 align="center">SURAT KELUAR BARANG GUDANG</h1>
             <p align="left" style="font-size: 12px;">INVOICE # {{ $sale->invoice_number }}</p>
-            <p align="right" style="font-size: 12px;">{{ \Carbon\Carbon::parse($sale->created_at)->locale('id_ID')->isoFormat('dddd, D MMM YYYY')  }}</h3> 
+            <p align="right" style="font-size: 12px;">{{ tgl_ind($sale->tanggal)  }}</h3> 
         </th>
         </tr>
         </thead>

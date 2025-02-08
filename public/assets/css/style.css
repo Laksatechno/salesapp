@@ -10460,7 +10460,7 @@ a.text-dark {
       line-height: 1em;
       font-size: 32px; }
   .wallet-card .wallet-footer {
-    border-top: 1px solid #DCDCE9;
+    /* border-top: 1px solid #DCDCE9; */
     padding-top: 20px;
     display: flex;
     align-items: flex-start;

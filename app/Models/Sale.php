@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     use HasFactory;
-    protected $fillable = ['invoice_number', 'customer_id','user_customer_id', 'user_id', 'total','tax', 'tax_status', 'due_date', 'total', 'status', 'diskon'];
+    protected $fillable = ['invoice_number', 'customer_id','user_customer_id', 'user_id', 'total','tax', 'tax_status', 'due_date', 'total', 'status', 'diskon', 'tanggal'];
 
     public function customer()
     {

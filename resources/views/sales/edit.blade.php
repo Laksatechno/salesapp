@@ -114,6 +114,11 @@
                     <input type="text" name="diskon" class="form-control" placeholder="Misal: 10" value="0">
                 </div>
 
+                <div class="form-group">
+                    <label for="tanggal"> Tanggal </label>
+                    <input type="date" name="tanggal" class="form-control" value="{{ $sale->tanggal }}">
+                </div>
+
                 <button type="submit" class="btn btn-success mt-3">Perbarui Penjualan</button>
             </form>
         </div>
@@ -189,7 +194,10 @@
                         <td>${item.total}</td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">
-                                Hapus
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"/>
+                                        </svg>
+                                        <span class="d-none d-md-inline"> Hapus</span>
                             </button>
                         </td>
                     </tr>`;

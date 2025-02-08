@@ -140,6 +140,7 @@ class SaleController extends Controller
                 'invoice_number' => $invoiceNumber,
                 'tax' => $tax,
                 'diskon' => $totalDiskon, // Menyimpan total diskon semua item
+                'tanggal' => now(),
             ]);
     
             // Simpan detail penjualan
@@ -249,6 +250,8 @@ class SaleController extends Controller
         'tax_status' => $request->tax_status,
         'diskon' => $request->diskon ?? 0,
         'total' => $finalTotal,
+        'status' => 'pending',
+        'tanggal' => $request->tanggal,
     ]);
 
     // dd ($sale);

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('header')
-    @include('layouts.appheaderback')
+    @include('layouts.appHeaderback')
 @endsection
 
 @section('content')

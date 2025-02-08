@@ -67,7 +67,7 @@
                     <div class="col-md-6 col-12">
                         <div class="form-group">
                             <label for="diskon_value">Nilai Diskon</label>
-                            <input type="number" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0" step="0.01">
+                            <input type="text" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0" step="0.01">
                         </div>
                     </div>
                 </div>

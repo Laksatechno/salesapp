@@ -230,7 +230,7 @@ class SaleController extends Controller
     }
 
     $totalPrice = array_reduce($items, fn($sum, $item) => $sum + $item['total'], 0);
-    $diskon = $request->diskon ? ($totalPrice * $request->diskon / 100) : 0;
+    $diskon = array_reduce($items, fn($sum, $item) => $sum + $item['diskon_barang'], 0);
     $subTotal = $totalPrice - $diskon;
     if ($request->tax_status == 'ppn'){
         $dpp = ceil($subTotal*11)/12;
@@ -248,7 +248,7 @@ class SaleController extends Controller
         'customer_id' => $request->customer_id,
         'tax' => $tax,
         'tax_status' => $request->tax_status,
-        'diskon' => $request->diskon ?? 0,
+        'diskon' => $diskon,
         'total' => $finalTotal,
         'status' => 'pending',
         'tanggal' => $request->tanggal,
@@ -264,6 +264,7 @@ class SaleController extends Controller
             'quantity' => $item['quantity'],
             'price' => $item['price'],
             'total' => $item['total'],
+            'diskon_barang' => $item['diskon_barang'],
         ]);
     }
 

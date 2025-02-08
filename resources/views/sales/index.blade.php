@@ -89,13 +89,13 @@
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('sales.show', $sale->id) }}">Lihat</a>
                                             </li>
-                                            @foreach ($sales as $sale)
-                                            @if ($sale->customer_id)
+                                            {{-- @foreach ($sales as $sale)
+                                            @if ($sale->customer_id) --}}
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('sales.edit', $sale->id) }}">Edit</a>
                                                 </li>
-                                            @endif
-                                            @endforeach                                        
+                                            {{-- @endif
+                                            @endforeach                                         --}}
                                             {{-- @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'keuangan')
                                             <li>
                                                 <button type="button" class="btn edit-sales-cs" data-id="{{ $sale->id }}" data-user="{{$sale->users->id ?? ''}}">
@@ -190,7 +190,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            $('#salesTable').DataTable();
+            $('#salesTable').DataTable( {
+                "order": [[ 0, "desc" ]]
+            });
 
             $("#updateStatusForm").submit(function(e) {
             e.preventDefault(); // Mencegah reload halaman

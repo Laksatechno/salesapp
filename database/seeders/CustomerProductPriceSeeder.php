@@ -26,7 +26,7 @@ class CustomerProductPriceSeeder extends Seeder
                 DB::table('customer_product_prices')->insert([
                     'customer_id' => $customer_id, // Menambahkan ID pelanggan yang valid
                     'product_id' => $product_id,   // Menambahkan ID produk yang valid
-                    'price' => $faker->numberBetween(10000, 1000000), // Harga acak untuk produk pelanggan
+                    'price' => '100000', // Harga acak untuk produk pelanggan
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

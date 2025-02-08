@@ -26,7 +26,7 @@ return new class extends Migration
                 ->onDelete('set null'); // Set null jika user dihapus
             $table->bigInteger('total'); // Total harga tanpa pajak
             $table->bigInteger('tax')->nullable(); // Kolom untuk menyimpan pajak (PPN)
-            $table->bigInteger('diskon')->nullable(); // Kolom untuk menyimpan diskon
+            $table->decimal('diskon', 10, 0)->nullable(); // Kolom untuk menyimpan diskon
             $table->enum('tax_status', ['ppn', 'non-ppn'])->default('non-ppn'); // Status pajak, apakah PPN atau non-PPN
             $table->date('tanggal'); // Tanggal penjualan
             $table->date('due_date'); // Tanggal jatuh tempo

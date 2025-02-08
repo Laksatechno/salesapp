@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->bigInteger('price');
             $table->bigInteger('total');
-            $table->bigInteger('diskon_barang')->nullable(); // Kolom untuk menyimpan diskon
+            $table->decimal('diskon_barang', 10, 0)->nullable(); // Kolom untuk menyimpan diskon
             $table->timestamps();
         });
     }

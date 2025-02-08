@@ -59,7 +59,7 @@
                     <div class="col-md-6 col-12">
                         <div class="form-group">
                             <label for="diskon_value">Nilai Diskon</label>
-                            <input type="number" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0" step="0.01">
+                            <input type="text" id="diskon_value" class="form-control" placeholder="Masukkan nilai diskon" value="0">
                         </div>
                     </div>
                 </div>
@@ -109,10 +109,6 @@
                         <option value="ppn" {{ $sale->tax_status == 'ppn' ? 'selected' : '' }}>PPN</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="diskon">Diskon (%) </label>
-                    <input type="text" name="diskon" class="form-control" placeholder="Misal: 10" value="0">
-                </div>
 
                 <div class="form-group">
                     <label for="tanggal"> Tanggal </label>
@@ -142,6 +138,9 @@
                 'diskon_barang' => $detail->diskon_barang
             ];
         }))) !!}');
+
+        // console json item
+        console.log(items);
 
         // Fungsi untuk memuat produk berdasarkan customer ID
         function loadProducts(customerId) {
@@ -207,6 +206,11 @@
             $('#itemsInput').val(JSON.stringify(items));
         }
 
+        // Fungsi untuk mengonversi input koma atau titik menjadi angka
+        // function parseDiskonValue(value) {
+        //     return parseFloat(value.replace(',', '.')) || 0;
+        // }
+
         // Tambahkan item baru
         $('#addItem').click(function () {
             const productId = $('#product_id').val();
@@ -214,7 +218,7 @@
             const quantity = parseInt($('#quantity').val(), 10);
             let price = parseFloat($('#price').val());
             const diskonType = $('#diskon_type').val();
-            const diskonValue = parseFloat($('#diskon_value').val()) || 0;
+            const diskonValue = parseFloat($('#diskon_value').val());
             
             let diskon_barang = 0;
             if (diskonType === 'percent') {

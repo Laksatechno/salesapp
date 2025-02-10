@@ -1,6 +1,5 @@
 
 @forelse ($penawarans as $data)
-    <li>
             <div class="item">
                 <div class="in">
                     <div class="text-muted">{{ $data->customer }} {{ $data->perihal }} {{ \Carbon\Carbon::parse($data->created_at )->locale('id_ID')->isoFormat('dddd, D MMM YYYY') }}</div>
@@ -10,8 +9,9 @@
                 <div class="status"> 
                     {{-- button detail dropdown --}}
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Detail
+                        <button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m7 10l5 5l5-5z"/></svg>
+                            <span class="d-none d-md-inline"> Detail</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <!-- Item Dropdown -->
@@ -45,7 +45,6 @@
 
                 </div>
             </div>
-    </li>
 @empty
     <p style="text-align: center">Data Penawaran tidak ditemukan.</p>
 @endforelse

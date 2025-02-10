@@ -5,11 +5,11 @@
 @section('content')
 
 <div class="section mt-2">
+    <div class="section-heading">
+        <h2 class="title">Laporan sales - Product {{ $product->name }}</h2>
+    </div>
     <div class="card">
         <div class="card-body table-responsive">
-            <h2>Penjualan untuk Produk: {{ $product->name }}</h2>
-
-            {{-- Input pencarian dan filter marketing --}}
             
             <form id="filter-form" method="GET" action="{{ route('reports.show' , $product->id) }}">
                 <div class="row">
@@ -55,6 +55,9 @@
                     @endif
                 </div>
             </form>
+            <button id="print-byproduct-btn" data-product="{{ $product->id }}" class="btn btn-danger btn-sm btn-block mb-2">
+                <i class="fas fa-file-pdf"></i> PDF
+            </button>
             <div id="sales-list" class="transactions">
                 @include('reports.partials.salesbyproduct', ['sales' => $sales, 'product' => $product])
             </div>
@@ -81,9 +84,6 @@
 <!-- DateRangePicker JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
-
 <script>
     
     $(document).ready(function() {
@@ -109,6 +109,7 @@
             $('#end-date').val('');
             loadSales(); // Muat ulang data penjualan
         });
+
 
 
         // Fungsi untuk memuat data penjualan berdasarkan filter
@@ -144,36 +145,39 @@
         });
 
         // Handle tombol cetak PDF
-    // $('#print-pdf-btn').click(function () {
-    //     const formData = $('#filter-form').serialize(); // Ambil data form
+        $(document).on('click', '#print-byproduct-btn', function () {
+        const product_id = $(this).data('product'); // Ambil ID produk dari atribut data-product
+        const formData = $('#filter-form').serialize(); // Ambil data form
 
-    //     // Kirim data filter ke server menggunakan AJAX
-    //     $.ajax({
-    //         url: '{{ route("reports.print") }}',
-    //         method: 'POST',
-    //         data: formData,
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
-    //         },
-    //         xhrFields: {
-    //             responseType: 'blob' // Mengindikasikan respons adalah file binary
-    //         },
-    //         success: function (response) {
-    //             // Buat URL dari blob
-    //             const blob = new Blob([response], { type: 'application/pdf' });
-    //             const url = window.URL.createObjectURL(blob);
+        // Tambahkan product_id ke formData
+        const fullData = formData + '&product_id=' + product_id;
 
-    //             // Buka PDF di tab baru
-    //             window.open(url, '_blank');
-
-    //             // Bersihkan URL setelah digunakan
-    //             window.URL.revokeObjectURL(url);
-    //         },
-    //         error: function (xhr) {
-    //             alert('Terjadi kesalahan saat mencetak PDF.');
-    //         }
-    //     });
-    // });
+        $.ajax({
+            url: '{{ route("reports.pdfreportbyproduct") }}',
+            method: 'POST',
+            data: fullData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (response) {
+                console.log(response.sales);
+                const blob = new Blob([response], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                window.URL.revokeObjectURL(url);
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat mencetak PDF!'
+                });
+            }
+        });
+    });
 
     });
 

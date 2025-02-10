@@ -39,7 +39,7 @@ Route::middleware('guest')->group(function () {
     })->name('login');
 });
 
-Route::middleware(['auth', 'role:customer,superadmin,marketing,admin'])->group(function () {
+Route::middleware(['auth', 'role:customer,superadmin,marketing,admin,keuangan'])->group(function () {
     // Brosur
     Route::resource('brochures', BrochureController::class);
     Route::get('/brochures/{brochure}/download', [BrochureController::class, 'download'])
@@ -111,6 +111,7 @@ Route::middleware(['auth', 'role:superadmin,admin,marketing,keuangan'])->group(f
     Route::get('reports/show/{id}', [ReportController::class, 'show'])->name('reports.show');
     Route::get('reports/reportbycustomer/{customer_id}', [ReportController::class, 'reportbycustomer'])->name('reports.reportbycustomer');
     Route::post('/reports/print', [ReportController::class, 'print'])->name('reports.print');
+    Route::post('/reports/printbyproduct', [ReportController::class, 'pdfreportbyproduct'])->name('reports.pdfreportbyproduct');
 
     // Route::resource('shipments', ShipmentController::class);
 

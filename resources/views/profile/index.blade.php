@@ -17,7 +17,7 @@
 <div id="appCapsule">
     <div class="section mt-3 text-center">
         <div class="avatar-section">
-            <input type="file" class="upload" name="foto" id="avatar" accept=".jpg, .jpeg, .gif, .png" capture="camera">
+            <input type="file" class="upload" name="foto" id="avatar" accept=".jpg, .jpeg, .gif, .png" accept="image/*">
             <a href="#">
             @if(Auth::user()->foto == '')
                 <img src="{{ asset('content/avatar.jpg') }}" alt="image" class="imaged w100 rounded">

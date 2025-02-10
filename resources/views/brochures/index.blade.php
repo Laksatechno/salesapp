@@ -6,7 +6,7 @@
 <div class="section mt-2">
     <div class="section-heading">
         <h2 class="title">Brosur</h2>
-        @if (Auth:: user()->role == 'superadmin')
+        @if (auth() -> user() -> role == 'superadmin' || auth() -> user() -> role == 'admin') 
         <a href="{{ route('brochures.create') }}" class="btn btn-primary">Tambah Brosur</a>
         @endif
     </div>

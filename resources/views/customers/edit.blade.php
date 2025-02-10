@@ -3,13 +3,14 @@
     @include('layouts.appHeaderback')
 @endsection
 @section('content')
-<div class="container">
-    <h2>Edit Customer</h2>
+<div class="section inset mt-2">
+    <div class="section-title">Ubah Data Customer</div>
+    <div class="wide-block pt-2 pb-2">
     <form action="{{ route('customers.update', $customer->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">Nama</label>
             <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}" required>
         </div>
         <div class="form-group">
@@ -21,7 +22,7 @@
             <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" >
         </div>
         <div class="form-group">
-            <label for="address">Address</label>
+            <label for="address">Alamat</label>
             <input type="text" class="form-control" id="address" name="address" value="{{ $customer->address }}" required>
         </div>
         <div class="form-group">
@@ -31,7 +32,8 @@
                 <option value="Subdis" {{ $customer->tipe_pelanggan == 'Subdis' ? 'selected' : '' }}>Subdis</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-success">Update</button>
+        <button type="submit" class="btn btn-success btn-block">Update</button>
     </form>
+    </div>
 </div>
 @endsection

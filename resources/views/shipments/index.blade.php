@@ -35,7 +35,10 @@
                         </div>
                     </div>
                     <div class="right">
-                        <a href="{{ route('shipments.show', $shipment->id) }}" class="btn btn-info btn-sm">Detail</a>
+                        <a href="{{ route('shipments.show', $shipment->id) }}" class="btn btn-info btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 17.8c4.034 0 7.686-2.25 9.648-5.8C19.686 8.45 16.034 6.2 12 6.2S4.314 8.45 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8M12 5c4.808 0 8.972 2.848 11 7c-2.028 4.152-6.192 7-11 7s-8.972-2.848-11-7c2.028-4.152 6.192-7 11-7m0 9.8a2.8 2.8 0 1 0 0-5.6a2.8 2.8 0 0 0 0 5.6m0 1.2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"/></svg>
+                            <span class="d-none d-md-inline">Lihat Detail</span>
+                        </a><br>
                         <!-- Tombol untuk membuka modal -->
                         @if (Auth:: user()->role == 'admin' || Auth:: user()->role == 'superadmin' || Auth:: user()->role == 'logistik')
                         {{-- <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#updateStatusModal" data-id="{{ $shipment->id }}">
@@ -43,7 +46,8 @@
                         </button> --}}
                         {{-- @if (!$shipment->statuses->last()->status == 'Barang Sudah Sampai') --}}
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#DialogForm{{$shipment->id}}">
-                            Update Status
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-1.875 0-3.512-.712t-2.85-1.925t-1.925-2.85T3 12t.713-3.512t1.924-2.85t2.85-1.925T12 3q2.05 0 3.888.875T19 6.35V4h2v6h-6V8h2.75q-1.025-1.4-2.525-2.2T12 5Q9.075 5 7.038 7.038T5 12t2.038 4.963T12 19q2.625 0 4.588-1.7T18.9 13h2.05q-.375 3.425-2.937 5.713T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"/></svg>
+                            <span class="d-none d-md-inline">Proses Pengiriman</span>
                         </button>
                         {{-- @endif --}}
                                 <!-- Dialog  -->
@@ -123,50 +127,6 @@
                 </div>
                 @endforeach
             </div>
-            {{-- <table class="table mt-3">
-                <thead>
-                    <tr>
-                        <th>Sale</th>
-                        <th>Delivery Date</th>
-                        <th>Arrival Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($shipments as $shipment)
-                        <tr>
-                            <td>{{ $shipment->sale->invoice_number }}</td>
-                            <td>{{ $shipment->delivery_date }}</td>
-                            <td>{{ $shipment->arrival_date ?? '-' }}</td>
-                            <td>
-                                @foreach ($shipment->statuses as $status)
-                                    <div>{{ $status->timestamp }}: {{ $status->status }}</div>
-                                @endforeach
-                            </td>
-                            <td>
-                                <td>
-                                    <a href="{{ route('shipments.show', $shipment->id) }}" class="btn btn-info">Lihat Detail</a>
-                                    <form action="{{ route('shipments.updateStatus', $shipment->id) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
-                                
-                                        <select name="status" class="form-control mb-2">
-                                            <option value="Dalam Perjalanan">Dalam Perjalanan</option>
-                                            <option value="Tertunda">Tertunda</option>
-                                            <option value="Sampai">Sampai</option>
-                                        </select>
-                                
-                                        <input type="file" name="photo_proof" class="form-control mb-2" accept="image/*">
-                                        <button type="submit" class="btn btn-primary">Update Status</button>
-                                    </form>
-                                </td>
-                                
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table> --}}
         </div>
 </div>
 

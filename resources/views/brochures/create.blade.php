@@ -2,15 +2,14 @@
 @section('header')
     @include('layouts.appHeaderback')
 @endsection
+
 @section('content')
 <div class="section mt-2">
     <div class="section-heading">
         <h2 class="title">Brosur</h2>
-        <a href="{{ route('brochures.index') }}" class="btn btn-primary">Kembali</a>
     </div>
     <div class="card">
         <div class="card-body">
-    <h1>Tambah Brosur</h1>
     <form id="createBrochureForm" enctype="multipart/form-data">
         @csrf
         <div class="form-group">

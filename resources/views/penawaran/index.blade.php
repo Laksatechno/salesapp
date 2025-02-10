@@ -28,40 +28,26 @@
 @endsection
 @section('content')
 <div class="section mt-2">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                {{-- <div class="card-header">
-                    <div class="search-bar">
-                        <form id="searchForm" action="{{ route('penawaran.index') }}" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search Customer" value="{{ request()->input('search') }}">
-                                <input type="hidden" name="user_id" id="userIdInput" value="{{ auth()->user()->id }}">
-                            </div>
-                        </form>
-                    </div>
-                </div> --}}
-
-
+    <div class="section-heading">
+        <h2 class="title">Penawaran</h2>
+        @if (auth() -> user() -> role == 'superadmin' || auth() -> user() -> role == 'admin' || auth() -> user() -> role == 'keuangan' || auth() -> user() -> role == 'marketing') 
+        <a class="btn btn-primary btn-sm " href="{{ url('/penawaran/new') }}" role="button">Tambah Penawaran</a>
+        @endif
+    </div>
+    <div class="transactions">
                 {{-- create button tambah penawaran --}}
-                <div class="card-body">
-                    <a class="btn btn-primary btn-sm btn-block" href="{{ url('/penawaran/new') }}" role="button">Tambah Penawaran</a>
-                </div>
-
-                
-                <ul id="penawaranContainer" class= "listview image-listview media inset mb-2">
                 @if (session('success'))
                 <div class="alert alert-success mb-1" role="alert">
                     {!! session('success') !!}
                 </div>
-                
-                @endif  
+                @endif 
+                 {{--alert error --}}
+                 @if (session('error'))
+                <div class="alert alert-danger mb-1" role="alert">
+                    {!! session('error') !!}
+                </div>
+                @endif
                     @include('penawaran.partials.penawaran_list')
-                </ul>
-
-            </div>
-
-        </div>
     </div>
 </div>
 

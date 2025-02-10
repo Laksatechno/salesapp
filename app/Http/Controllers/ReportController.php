@@ -163,9 +163,11 @@ class ReportController extends Controller
             $query->where('product_id', $product_id);
         })->with(['details.product', 'marketing', 'customer', 'users']);
 
-        // Filter berdasarkan marketing (bisa lebih dari satu)
-        if ($request->has('marketing_id') && !empty($request->marketing_id)) {
+        // Filter berdasarkan marketing (bisa lebih dari satu) dan jika kosong menampilkan semua marketing_id
+        if ($request->has('marketing_id')) {
             $salesQuery->whereIn('marketing_id', $request->marketing_id);
+        } elseif ($request-> has('marketing_id') && $request->marketing_id == '') {
+            $salesQuery->whereNotNull('marketing_id');
         }
 
         // Filter berdasarkan rentang tanggal
@@ -213,6 +215,58 @@ class ReportController extends Controller
 
         return view('reports.show', compact('sales', 'product', 'marketings'));
     }
+
+public function pdfreportbyproduct(Request $request)
+{
+    // Ambil ID produk dari request
+    $product_id = $request->input('product_id');
+
+    // Cek apakah produk ditemukan
+    $product = Product::findOrFail($product_id);
+
+    // Query penjualan berdasarkan produk
+    $salesQuery = Sale::whereHas('details', function ($query) use ($product_id) {
+        $query->where('product_id', $product_id);
+    })->with(['details.product', 'marketing', 'customer', 'users']);
+
+    // Filter berdasarkan marketing (jika ada)
+    if ($request->has('marketing_id')) {
+        $salesQuery->whereIn('marketing_id', (array) $request->marketing_id);
+    }
+
+    // Filter berdasarkan rentang tanggal
+    if ($request->has(['start_date', 'end_date'])) {
+        $salesQuery->whereBetween('created_at', [
+            $request->start_date,
+            $request->end_date
+        ]);
+    }
+
+    // Filter untuk bulan ini
+    if ($request->has('this_month') && $request->this_month == '1') {
+        $salesQuery->whereMonth('created_at', now()->month)
+                   ->whereYear('created_at', now()->year);
+    }
+
+    // Filter berdasarkan pencarian
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $salesQuery->where(function ($query) use ($search) {
+            $query->where('invoice_number', 'like', "%$search%")
+                  ->orWhereHas('customer', fn ($q) => $q->where('name', 'like', "%$search%"))
+                  ->orWhereHas('users', fn ($q) => $q->where('name', 'like', "%$search%"));
+        });
+    }
+
+    // Ambil data
+    $sales = $salesQuery->get();
+
+    // Load view untuk PDF
+    $pdf = PDF::loadView('reports.cetakpdf.reportbyproduct', compact('sales', 'product'));
+
+    return $pdf->stream('laporan_penjualan_product.pdf');
+}
+
 
 
 

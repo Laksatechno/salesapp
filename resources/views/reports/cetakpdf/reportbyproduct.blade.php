@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,6 +39,7 @@
             font-size: 1.2em;
             font-weight: bold;
             color: #2c3e50;
+            text-align: right;
         }
         .header {
             text-align: center;
@@ -56,11 +57,11 @@
 </head>
 <body>
     <div class="header">
-        <h1>Laporan Penjualan Produk</h1>
+        <h1>Laporan Penjualan Produk: {{ $product->name }}</h1>
         <p>Periode: {{ now()->format('d-m-Y') }}</p>
     </div>
 
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>Invoice Number</th>
@@ -73,17 +74,19 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($sales as $sale)
-                @foreach ($sale->details as $detail)
+            @php $total = 0; @endphp
+            @forelse ($sales as $salesData)
+                @foreach ($salesData->details as $detail)
                     @if ($detail->product_id == $product->id)
+                        @php $total += $detail->total; @endphp
                         <tr>
-                            <td>{{ $sale->invoice_number }}</td>
-                            <td>{{ $sale->customer->name ?? $sale->users->name }}</td>
+                            <td>{{ $salesData->invoice_number }}</td>
+                            <td>{{ $salesData->customer->name ?? $salesData->users->name }}</td>
                             <td>{{ $detail->product->name }}</td>
                             <td>{{ $detail->quantity }}</td>
-                            <td>Rp {{ number_format($detail->total) }}</td>
-                            <td>{{ $sale->created_at->format('d-m-Y') }}</td>
-                            <td>{{ $sale->marketing->name }}</td>
+                            <td>Rp {{ number_format($detail->total, 0, ',', '.') }}</td>
+                            <td>{{ $salesData->created_at->format('d-m-Y') }}</td>
+                            <td>{{ $salesData->marketing->name ?? '-' }}</td>
                         </tr>
                     @endif
                 @endforeach
@@ -96,22 +99,9 @@
     </table>
 
     <table class="table mt-3">
-        <thead>
-            <tr>
-                <th style="text-align: right;">Total Penjualan Keseluruhan Untuk Produk {{ $product->name }} :</th>
-                @php 
-                    $total = 0;
-                    foreach ($sales as $sale) {
-                        foreach ($sale->details as $detail) {
-                            if ($detail->product_id == $product->id) {
-                                $total += $detail->total;
-                            }
-                        }
-                    }
-                @endphp
-                <th style="text-align: right;" class="total-sales">Rp {{ number_format($total) }}</th>
-            </tr>
-        </thead>
+        <tr>
+            <th class="total-sales">Total Penjualan: Rp {{ number_format($total, 0, ',', '.') }}</th>
+        </tr>
     </table>
 </body>
 </html>

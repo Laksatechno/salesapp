@@ -10768,3 +10768,14 @@ a.text-dark {
       color: #FFF;
       margin-top: 7px;
       font-size: 24px; }
+
+      .swal2-popup {
+        font-size: 11px !important;
+    }
+    
+    /* .swal2-styled {
+        padding: 10px 32px 10px 32px !important;
+        margin: 20px 10px 0px 10px !important;
+        width: 200px;
+        height: 200px;
+    } */

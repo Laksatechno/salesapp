@@ -6,8 +6,10 @@
 
     <div class="section mt-2">
         <div class="section-heading">
-            {{-- <h3 class="title">Penjualan</h3> --}}
+            <h3 class="title">Penjualan</h3>
+            @if (auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin' || auth()->user()->role == 'marketing')
             <a href="{{ route('sales.create') }}" class="btn btn-primary">Buat Penjualan</a>
+            @endif
         </div>
         @if (session('success'))
             <div class="alert alert-success mt-3">
@@ -43,9 +45,16 @@
                                             Terbayar
                                         </span>
                                     @endif
-                                    <button class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#updateStatusModal{{ $sale->id }}">
+                                    @if (auth ()->user()->role == 'superadmin' || auth()->user()->role == 'admin' || auth()->user()->role == 'keuangan')
+                                    <span class="badge bg-{{ $sale->status == 'pending' ? 'warning' : 'success' }}" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#updateStatusModal{{ $sale->id }}">
+                                    {{-- <button class="btn btn-warning btn-sm mt-1" data-bs-toggle="modal" data-bs-target="#updateStatusModal{{ $sale->id }}">
                                         {{ ucfirst($sale->status) }}
-                                    </button>
+                                    </button> --}}
+                                    {{ ucfirst($sale->status) }}
+                                    </span>
+                                    @else
+                                    <span class="badge bg-{{ $sale->status == 'pending' ? 'warning' : 'success' }}">{{ ucfirst($sale->status) }} </span>
+                                    @endif
                                 
                                     <!-- Modal Update Status -->
                                     <div class="modal fade" id="updateStatusModal{{ $sale->id }}" tabindex="-1" aria-labelledby="updateStatusLabel{{ $sale->id }}" aria-hidden="true">
@@ -60,15 +69,16 @@
                                                     {{-- @method('PUT') --}}
                                                     <div class="modal-body">
                                                         <p>Apakah Anda yakin ingin mengubah status menjadi <strong>Complete</strong>?</p>
+                                                        <div class="form-group mb-3">
+                                                            <label for="status">Status</label>
+                                                            <select name="status" id="status" class="form-control">
+                                                                <option value="pending">Pending</option>
+                                                                <option value="completed">Complete</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     {{-- create select option pending , complete --}}
-                                                    <div class="form-group mb-3">
-                                                        <label for="status">Status</label>
-                                                        <select name="status" id="status" class="form-control">
-                                                            <option value="pending">Pending</option>
-                                                            <option value="completed">Complete</option>
-                                                        </select>
-                                                    </div>
+                                                    
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                         <button type="submit" class="btn btn-success">Update</button>

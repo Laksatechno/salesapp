@@ -12,6 +12,7 @@
     </div>
 </div>
 @endforeach
+
 {{-- @foreach ($sales as $sale)
     
         <tr>
@@ -33,10 +34,10 @@
             <td>{{ $sale->marketing->name }}</td>
         </tr>
 
-@endforeach
+@endforeach --}}
 
 @if ($sales->isEmpty())
     <tr>
         <td colspan="7" class="text-center">Tidak ada data penjualan yang ditemukan.</td>
     </tr>
-@endif --}}
+@endif 

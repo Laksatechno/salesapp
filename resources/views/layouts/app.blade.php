@@ -28,12 +28,14 @@
     {{-- <link rel="stylesheet" href="{{ url('/assets/css/custom.css') }}"> --}}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     
+    @if (Request::is('products*') || Request::is('sales*' ) || Request::is('reports*') || Request::is('customers*'))
         <link rel="stylesheet" href="{{ url('/assets/plugins/datepicker/datepicker3.css') }}">
         <link rel="stylesheet" href="{{ url('/assets/plugins/datatables/dataTables.bootstrap.css') }}">
         <link rel="stylesheet" href="{{ url('/assets/plugins/magnific-popup/magnific-popup.css') }}">
+    @endif
 
             <!-- Styles -->
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Load jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

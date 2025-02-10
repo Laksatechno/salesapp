@@ -17,17 +17,22 @@
 {{-- <script type="text/javascript" src="{{ URL::asset('__service-worker.js')}}"></script> --}}
 {{-- <script src="{{ asset('assets/__service-worker.json') }}"></script> --}}
 
+<!-- ///////////// Js Files End ////////////////////  -->
+
+@if (Request::is('products*') || Request::is('sales*'  ) || Request::is('reports*') || Request::is('customers*'))
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('assets/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+@endif
 
 
-<script>
+{{-- <script>
     $(".datepicker").datepicker({
         format: "dd-mm-yyyy",
         autoclose: true
     });
-</script>
+
+</script> --}}
 
 {{-- <script src="{{ asset('assets/js/script.js') }}"></script> --}}

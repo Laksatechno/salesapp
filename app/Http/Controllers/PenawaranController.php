@@ -86,9 +86,10 @@ class PenawaranController extends Controller
             //REDIRECT KEMBALI KE HALAMAN /PRODUCT DENGAN FLASH MESSAGE SUCCESS
             return redirect()->route('detail.penawaran', $penawarans->id)->with(['success' => '' . $penawarans->customer . ' Penawaran Telah dibuat']);
         } catch (\Exception $e) {
-            //APABILA TERDAPAT ERROR MAKA REDIRECT KE FORM INPUT
-            //DAN MENAMPILKAN FLASH MESSAGE ERROR
-            return redirect('/penawaran/new')->with(['error' => $e->getMessage()]);
+            // JIKA TERJADI ERROR, TAMPILKAN PESAN YANG LEBIH MUDAH DIPAHAMI
+            return redirect('/penawaran')->with([
+                'error' => 'Lenkgapi Profile Akun Anda dan Silahkan coba lagi'
+            ]);
         }
     }
 

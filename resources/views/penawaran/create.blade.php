@@ -3,20 +3,16 @@
     @include('layouts.appHeaderback')
 @endsection
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <b class="card-title">Tambah Penawaran</b>
-                    </div>
-                    <div class="card-body">
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
+    <div class="section mt-2">
+        <div class="section-heading">
+            <b class="card-title">Tambah Penawaran</b>
+        </div>
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+        <div class="wide-block pt-2 pb-2">
                         <form action="{{ url('/penawaran') }}" method="post">
                             @csrf
                             <div class="form-group">
@@ -36,9 +32,6 @@
                             </div>
                             <button class="btn btn-primary btn-sm btn-block">Tambah</button>
                         </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

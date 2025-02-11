@@ -7,7 +7,8 @@ use App\Models\Sale;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -270,12 +271,70 @@ public function pdfreportbyproduct(Request $request)
 
 
 
-    public function reportbycustomer($customer_id)
-    {
-        // Filter penjualan berdasarkan customer_id
-        $sales = Sale::where('customer_id', $customer_id)->with('details.product')->get();
-        return view('reports.customer', compact('sales'));
+public function reportbycustomer(Request $request, $customer_id)
+{
+    $query = Sale::where('customer_id', $customer_id)->with('details.product', 'customer', 'user');
+
+    // Filter berdasarkan pencarian produk atau nomor invoice
+    if ($request->has('search') && !empty($request->search)) {
+        $query->where(function ($q) use ($request) {
+            $q->where('invoice_number', 'like', '%' . $request->search . '%')
+              ->orWhereHas('details.product', function ($q) use ($request) {
+                  $q->where('name', 'like', '%' . $request->search . '%');
+              });
+        });
     }
+
+
+    // Filter berdasarkan rentang tanggal dari daterangepicker
+    if ($request->has('daterange') && !empty($request->daterange)) {
+        $dates = explode(' - ', $request->daterange);
+        $startDate = date('Y-m-d', strtotime($dates[0]));
+        $endDate = date('Y-m-d', strtotime($dates[1]));
+
+        $query->whereBetween('created_at', [$startDate, $endDate]);
+    }
+
+    $sales = $query->get();
+    $totaljual = $query->sum(DB::raw('total'));
+    
+    return view('reports.customer', compact('sales', 'totaljual'));
+}
+
+public function printReport($customer_id, Request $request)
+{
+    $query = Sale::where('customer_id', $customer_id)->with('details.product', 'customer', 'user');
+
+    // Filter berdasarkan pencarian produk atau nomor invoice
+    if ($request->has('search') && !empty($request->search)) {
+        $query->where(function ($q) use ($request) {
+            $q->where('invoice_number', 'like', '%' . $request->search . '%')
+              ->orWhereHas('details.product', function ($q) use ($request) {
+                  $q->where('name', 'like', '%' . $request->search . '%');
+              });
+        });
+    }
+
+
+    // Filter berdasarkan rentang tanggal dari daterangepicker
+    if ($request->has('daterange') && !empty($request->daterange)) {
+        $dates = explode(' - ', $request->daterange);
+        $startDate = date('Y-m-d', strtotime($dates[0]));
+        $endDate = date('Y-m-d', strtotime($dates[1]));
+
+        $query->whereBetween('created_at', [$startDate, $endDate]);
+    }
+
+    $sales = $query->get();
+
+    // Hitung total penjualan
+    $totaljual = $sales->sum(function ($sale) {
+        return $sale->total + $sale->tax;
+    });
+
+    return view('reports.cetakpdf.reportbycustomer', compact('sales', 'totaljual'));
+}
+
     
 
     public function generate(Request $request)

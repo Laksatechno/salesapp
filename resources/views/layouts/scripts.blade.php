@@ -19,12 +19,12 @@
 
 <!-- ///////////// Js Files End ////////////////////  -->
 
-@if (Request::is('products*') || Request::is('sales*'  ) || Request::is('reports*') || Request::is('customers*'))
+{{-- @if (Request::is('products*') || Request::is('sales*'  ) || Request::is('reports*') || Request::is('customers*')) --}}
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('assets/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
-@endif
+{{-- @endif --}}
 
 
 {{-- <script>

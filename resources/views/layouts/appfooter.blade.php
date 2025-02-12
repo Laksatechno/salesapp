@@ -40,9 +40,14 @@
 
 <!-- * App Bottom Menu -->
 
-<footer class="text-muted text-center" style="display:none">
-   <p>© 2023 - {{ now()->year }} Laksa Medika Internusa</p>
+<footer class="text-muted text-center " style="display:none">
+    <p>© 2025 - {{ date('Y') }} Design By: laksamedical.com
+        <div id="credit">
+            <a class="credits_a" href="https://laksamedical.com" target="_blank">laksamedical.com</a>
+        </div>
+    </p>
 </footer>
+
 @include ('layouts.scripts')
 </body>
 </html>

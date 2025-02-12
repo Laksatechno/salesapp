@@ -25,7 +25,7 @@
     <meta itemprop="image" content="content/meta-tag.jpg">
 
     <link rel="stylesheet" href="{{ url('/assets/css/style.css') }}">
-    {{-- <link rel="stylesheet" href="{{ url('/assets/css/custom.css') }}"> --}}
+    <link rel="stylesheet" href="{{ url('/assets/css/custom.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     
     {{-- @if (Request::is('products*') || Request::is('sales*' ) || Request::is('reports*') || Request::is('customers*')) --}}
@@ -37,13 +37,13 @@
             <!-- Styles -->
      <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Load jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
     <!-- Load Popper.js (diperlukan oleh Bootstrap 4) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 
     <!-- Load Bootstrap -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/js/bootstrap.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/js/bootstrap.min.js"></script> --}}
     <link rel="manifest" href="__manifest.json"> 
 
     <!-- Scripts -->

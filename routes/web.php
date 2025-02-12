@@ -111,7 +111,7 @@ Route::middleware(['auth', 'role:superadmin,admin,marketing,keuangan'])->group(f
     Route::get('reports/show/{id}', [ReportController::class, 'show'])->name('reports.show');
     Route::get('reports/reportbycustomer/{customer_id}', [ReportController::class, 'reportbycustomer'])->name('reports.reportbycustomer');
     Route::post('/reports/print', [ReportController::class, 'print'])->name('reports.print');
-    Route::post('/reports/printbyproduct', [ReportController::class, 'pdfreportbyproduct'])->name('reports.pdfreportbyproduct');
+    Route::get('/reports/printbyproduct/{product_id}', [ReportController::class, 'pdfreportbyproduct'])->name('reports.pdfreportbyproduct');
     Route::get('reports/print/{customer_id}', [ReportController::class, 'printReport'])->name('reports.printReport');
 
     // Route::resource('shipments', ShipmentController::class);

@@ -4,26 +4,22 @@
 @endsection
 @section('content')
 <div class="section mt-2"> 
-    <div class="wide-block pt-2 pb-2">
-            <h2>Report By Customer {{ $sales->first()->customer->name ?? 'Unknown' }} (ID: {{ $sales->first()->customer->id ?? '-' }})</h2>
+    <div class="section-heading mt-2">
+        <h2 class="title"> {{ $sales->first()->customer->name ?? 'tidak ada' }}</h2>
+    </div>
+    <div class="section-body">
             
             {{-- Filter Input --}}
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <input type="text" name="search" class="form-control search" placeholder="Cari invoice atau customer..." value="{{ request('search') }}">
+                    <input type="text" name="search" id="searchInput" class="form-control search" placeholder="Cari invoice atau customer..." value="{{ request('search') }}">
                 </div>
-                <div class="col-md-5 form-group">
+                <div class="col-md-6 form-group">
                     <input type="text" id="daterange" class="form-control">
                 </div>
-                {{-- <div class="col-md-4 form-group">
-                    <select name="transaction_type" id="transaction-type" class="form-control">
-                        <option value="">Semua Transaksi</option>
-                        <option value="customer" {{ request('transaction_type') == 'customer' ? 'selected' : '' }}>Customer</option>
-                        <option value="user" {{ request('transaction_type') == 'user' ? 'selected' : '' }}>User</option>
-                    </select>
-                </div> --}}
-                <div class="col-md-12 form-group">
-                    <button type="button" class="btn btn-primary btn-print"  >Print</button>
+
+                <div class="col-md-3 form-group">
+                    <button type="button" class="btn btn-primary btn-block btn-print"  >Print</button>
                 </div>
             </div>
             <div class="card table-responsive" >
@@ -106,9 +102,9 @@
         });
 
         function fetchFilteredData() {
-            let search = $('#search').val();
+            let search = $('#searchInput').val();
             let daterange = $('#daterange').val();
-
+            console.log(search);
             // Pastikan customer_id tersedia sebelum AJAX dipanggil
             if (customer_id) {
                 $.ajax({
@@ -128,24 +124,28 @@
             }
         }
 
-        $('#search, #daterange').on('input change', fetchFilteredData);
+        $('#searchInput, #daterange').on('input change', fetchFilteredData);
 
         $('.btn-print').click(function () {
-        let search = $('.search').val();
-        let daterange = $('#daterange').val();
+            // let customer_id = "{{ $sales->first()->customer->id ?? '' }}";
+            let search = $('#searchInput').val(); // Perbaikan di sini
+            let daterange = $('#daterange').val();
+            console.log(customer_id);
+            
+            if (!customer_id) {
+                Swal.fire('Error', 'Customer ID tidak ditemukan!', 'error');
+                return;
+            }
 
-        if (!customer_id) {
-            Swal.fire('Error', 'Customer ID tidak ditemukan!', 'error');
-            return;
-        }
+            let url = '{{ route("reports.printReport", ":customer_id") }}'
+                .replace(':customer_id', customer_id) + 
+                "?search=" + encodeURIComponent(search) + 
+                "&daterange=" + encodeURIComponent(daterange);
+            
+            console.log("url: " + url);
+            window.open(url, '_blank');
+        });
 
-        let url = '{{ route("reports.printReport", ":customer_id") }}'
-            .replace(':customer_id', customer_id) + 
-            "?search=" + encodeURIComponent(search) + 
-            "&daterange=" + encodeURIComponent(daterange);
-
-        window.open(url, '_blank');
-    });
 
     });
 

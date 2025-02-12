@@ -52,7 +52,7 @@
                             <td>{{ $sale->invoice_number }}</td>
                             <td>{{ $detail->product->name }}</td>
                             <td>{{ $detail->quantity }}</td>
-                            <td>Rp {{ number_format($sale->total + $sale->tax) }}</td>
+                            <td>Rp {{ number_format($sale->total) }}</td>
                             <td>{{ $sale->created_at->format('d-m-Y') }}</td>
                             <td>{{ $sale->marketing->name }}</td>
                         </tr>

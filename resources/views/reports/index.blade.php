@@ -270,6 +270,7 @@
                 window.URL.revokeObjectURL(url);
             },
             error: function (xhr) {
+                console.log(xhr);
                 alert('Terjadi kesalahan saat mencetak PDF.');
             }
         });

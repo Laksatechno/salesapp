@@ -146,8 +146,12 @@ class ReportController extends Controller
     // Ambil data sales yang sudah difilter
     $sales = $sales->get();
 
+    //total jual
+    $totaljual = $sales->sum(DB::raw('total'));
+
+
     // Load view untuk PDF
-    $pdf = Pdf::loadView('reports.print', compact('sales'));
+    $pdf = Pdf::loadView('reports.print', compact('sales', 'totaljual'))->setPaper('a4');
 
     // Download atau tampilkan PDF
     // return $pdf->download('laporan_penjualan.pdf');

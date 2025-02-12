@@ -41,6 +41,12 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="text-align: right;">Total Penjualan Keseluruhan</td>
+                        <td style="text-align: right;">Rp {{ number_format($totaljual) }}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </section>

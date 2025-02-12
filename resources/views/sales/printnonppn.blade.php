@@ -98,7 +98,7 @@
                         <p>{{ $customer->name ?? $sale->users->name }}<br>
                         {{ $customer->address ?? $sale->users->address }}<br>
                         {{ $customer->phone ?? $sale->users->no_hp }} <br>
-                        {{ $customer->email ?? $sale->users->email }}
+                        {{ $customer->email ?? $sale->users->email ?? '-' }}
                         </p>
                     </td>
                 </tr>

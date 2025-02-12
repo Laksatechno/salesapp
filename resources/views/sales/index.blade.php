@@ -101,6 +101,7 @@
                                             </li>
                                             {{-- @foreach ($sales as $sale)
                                             @if ($sale->customer_id) --}}
+                                            @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->role == 'marketing')
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('sales.edit', $sale->id) }}">Edit</a>
                                                 </li>
@@ -113,6 +114,7 @@
                                                 </button>
                                             </li>
                                             @endif  --}}
+                                            
                                             <li>
                                                 <form action="{{ route('sales.destroy', $sale->id) }}" method="POST" style="display:inline;" id="deleteForm{{ $sale->id }}">
                                                     @csrf
@@ -120,6 +122,7 @@
                                                     <button type="button" class="dropdown-item text-danger" onclick="confirmDelete({{ $sale->id }})">Delete</button>
                                                 </form>
                                             </li>
+                                            @endif
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('print.pdf', $sale->id) }}">Print</a>
                                             </li>

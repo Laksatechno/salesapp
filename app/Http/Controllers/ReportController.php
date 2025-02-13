@@ -20,17 +20,22 @@ class ReportController extends Controller
         $sales = Sale::with('details.product', 'customer', 'marketing')->orderBy('created_at', 'desc');
     
         // Filter berdasarkan pencarian (invoice number atau nama customer)
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $sales->where(function ($query) use ($search) {
-                $query->where('invoice_number', 'like', '%' . $search . '%')
-                      ->orWhereHas('customer', function ($q) use ($search) {
-                          $q->where('name', 'like', '%' . $search . '%');
-                      })
-                      ->orWhereHas('marketing', function ($q) use ($search) {
-                          $q->where('name', 'like', '%' . $search . '%');
-                      });
-            });
+        if ($request->has('search') && !empty($request->search)) {
+            $sales->where(function ($q) use ($request) {
+                $q->where('invoice_number', 'like', '%' . $request->search . '%')
+                  ->orWhereHas('details.product', function ($q) use ($request) {
+                      $q->where('name', 'like', '%' . $request->search . '%');
+                  });
+                  })
+                  ->orWhereHas('customer', function ($q) use ($request) {
+                      $q->where('name', 'like', '%' . $request->search . '%');
+                  })
+                  ->orWhereHas('user', function ($q) use ($request) {
+                      $q->where('name', 'like', '%' . $request->search . '%');
+                  })
+                  ->orWhereHas('marketing', function ($q) use ($request) {
+                      $q->where('name', 'like', '%' . $request->search . '%');
+                  });
         }
     
         // Filter berdasarkan rentang waktu
@@ -146,12 +151,9 @@ class ReportController extends Controller
     // Ambil data sales yang sudah difilter
     $sales = $sales->get();
 
-    //total jual
-    $totaljual = $sales->sum(DB::raw('total'));
-
-
+    $total = $sales->sum('total');
     // Load view untuk PDF
-    $pdf = Pdf::loadView('reports.print', compact('sales', 'totaljual'))->setPaper('a4');
+    $pdf = Pdf::loadView('reports.print', compact('sales', 'total'))->setPaper('a4');
 
     // Download atau tampilkan PDF
     // return $pdf->download('laporan_penjualan.pdf');

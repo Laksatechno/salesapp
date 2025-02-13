@@ -1,4 +1,4 @@
-@foreach ($sales as $sale)
+@forelse ($sales as $sale)
 <div class="item">
     <div class="detail">
         <div>
@@ -10,4 +10,12 @@
         </div>
     </div>
 </div>
-@endforeach
+@empty 
+<div class="item">
+    <div class="detail">
+        <div>
+            <p style="color: rgb(255, 0, 0)">Tidak ada data penjualan</p>
+        </div>
+    </div>
+</div>
+@endforelse

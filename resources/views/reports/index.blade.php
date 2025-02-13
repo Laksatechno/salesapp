@@ -39,7 +39,7 @@
                         <div class="row">
                             <!-- Input Search -->
                             <div class="col-md-3 form-group">
-                                <input type="text" name="search" class="form-control search" placeholder="Cari invoice atau customer..." value="{{ request('search') }}">
+                                <input type="text" name="search" class="form-control search" placeholder="Cari invoice atau customer , marketing..." value="{{ request('search') }}">
                             </div>
                             
                             <!-- Rentang Waktu -->

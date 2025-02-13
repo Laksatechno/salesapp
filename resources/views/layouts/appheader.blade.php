@@ -55,10 +55,10 @@
                         <!-- profile box -->
                         <div class="profileBox pt-2 pb-2">
                             <div class="image-wrapper">
-                           @if(Auth::user()->photo == '')
+                           @if(Auth::user()->foto == '')
                                 <img src="{{ asset('content/avatar.jpg') }}" alt="picture" class="imaged w36 rounded">
                             @else
-                                <img src="{{ asset('storage/photos/' . Auth::user()->photo ) }}" alt="picture" class="imaged w36 rounded">
+                                <img src="{{ asset('photo/' . Auth::user()->foto ) }}" alt="picture" class="imaged w36 rounded">
                             @endif
   
                             </div>

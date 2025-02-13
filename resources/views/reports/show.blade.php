@@ -13,7 +13,7 @@
             
             <div class="row">
                 <div class="col-md-3 form-group">
-                    <input type="text" name="search" id="searchInput" class="form-control search" placeholder="Cari invoice atau customer..." value="{{ request('search') }}">
+                    <input type="text" name="search" id="searchInput" class="form-control search" placeholder="Cari invoice atau marketing..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-6 form-group">
                     <input type="text" id="daterange" class="form-control">

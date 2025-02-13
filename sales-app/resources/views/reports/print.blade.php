@@ -85,7 +85,7 @@
 <body>
     <section class="container_box">
         <h1>PT Laksa Medika Internusa</h1>
-        <p> Jl. Amarta No.50 RT01, RW.01, Pelem, Baturetno, Kec. Banguntapan, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55198</p>
+        <p> Jl. Amarta No. 12A RT01, RW.01, Pelem, Baturetno, Kec. Banguntapan, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55198</p>
         <div class="content_box">
             <table>
                 <thead>

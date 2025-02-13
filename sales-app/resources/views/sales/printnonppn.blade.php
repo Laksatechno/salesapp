@@ -90,7 +90,7 @@
                     <td colspan="2" align="left">
                         {{-- <h4>Dari</h4> --}}
                         <p>PT Laksa Medika Internusa<br>
-                           Pelem Lor No.50 Bantul Yogyakarta<br>
+                           Pelem Lor No. 12A Bantul Yogyakarta<br>
                         </p>
                     </td>
                     <td colspan="3">

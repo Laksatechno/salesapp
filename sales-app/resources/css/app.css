@@ -1,7 +1,0 @@
-/* .a {
-    text-decoration: none;
-} */
-
-/* import custom.css in public/assets/css */
-@import '../../public/assets/css/style.css';
-@import '../../public/assets/css/custom.css';

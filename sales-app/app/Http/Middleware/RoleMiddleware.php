@@ -33,7 +33,7 @@ class RoleMiddleware
 
         if (!in_array($userRole, $roles)) {
             // Simpan URL sebelumnya ke dalam session
-            session()->put('previousUrl', url()->previous());
+            // session()->put('previousUrl', url()->previous());
 
             // Redirect ke halaman sebelumnya
             return redirect()->back()->with('error', 'Unauthorized action.');
